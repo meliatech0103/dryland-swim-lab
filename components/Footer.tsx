@@ -50,11 +50,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/free/compare" className="text-gray-400 hover:text-white transition">
-                  {t('header.freestyleBenefits')}
-                </Link>
-              </li>
-              <li>
                 <Link href="/paid" className="text-gray-400 hover:text-white transition">
                   {t('header.course')}
                 </Link>
