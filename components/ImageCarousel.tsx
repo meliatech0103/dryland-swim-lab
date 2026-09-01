@@ -87,7 +87,10 @@ export default function ImageCarousel({ images, interval = 5000 }: ImageCarousel
           )}
 
           {/* 遮罩层 */}
-          <div className={`absolute inset-0 ${OVERLAY_STYLE.className}`} />
+          <div
+            className={`absolute inset-0 ${OVERLAY_STYLE.className}`}
+            style={{ pointerEvents: 'none' }}
+          />
         </div>
       ))}
 

@@ -55,16 +55,16 @@ export default function Home() {
               <p className="text-xl md:text-2xl mb-8 drop-shadow-md text-gray-800">
                 {t('home.hero.description')}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center relative z-20">
                 <Link
                   href="/free/calc"
-                  className="px-8 py-4 rounded-lg font-semibold transition-colors shadow-lg bg-blue-600 text-white hover:bg-blue-700"
+                  className="px-8 py-4 rounded-lg font-semibold transition-colors shadow-lg bg-blue-600 text-white hover:bg-blue-700 relative z-20"
                 >
                   {t('home.hero.tryFree')}
                 </Link>
                 <Link
                   href="/paid"
-                  className="px-8 py-4 rounded-lg font-semibold transition-colors shadow-lg backdrop-blur-sm border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                  className="px-8 py-4 rounded-lg font-semibold transition-colors shadow-lg backdrop-blur-sm border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white relative z-20"
                 >
                   {t('home.hero.viewCourse')}
                 </Link>
