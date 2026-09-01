@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface ImageCarouselProps {
   images: string[];
@@ -19,6 +20,7 @@ const OVERLAY_STYLE = {
 export default function ImageCarousel({ images, interval = 5000 }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -33,6 +35,13 @@ export default function ImageCarousel({ images, interval = 5000 }: ImageCarousel
 
     return () => clearInterval(timer);
   }, [images.length, interval, mounted]);
+
+  // 当前图片加载完成时，设置加载状态
+  useEffect(() => {
+    if (mounted) {
+      setIsLoaded(true);
+    }
+  }, [mounted, currentIndex]);
 
   if (!mounted || images.length === 0) {
     return (
@@ -50,13 +59,33 @@ export default function ImageCarousel({ images, interval = 5000 }: ImageCarousel
           }`}
           style={{ zIndex: index === currentIndex ? 1 : 0 }}
         >
-          <div
-            className="w-full h-full bg-cover bg-center bg-no-repeat"
+          {/* 使用 Next.js Image 组件 */}
+          <Image
+            src={image}
+            alt={`Slide ${index + 1}`}
+            fill
+            priority={index === 0} // 第一张图片优先加载
+            quality={85} // 质量85%，平衡大小和清晰度
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
             style={{
-              backgroundImage: `url(${image})`,
               minHeight: '600px',
+              width: '100%',
+              height: '100%',
+            }}
+            onLoadingComplete={() => {
+              // 图片加载完成后的回调
+              if (index === currentIndex) {
+                setIsLoaded(true);
+              }
             }}
           />
+
+          {/* 加载占位符 */}
+          {!isLoaded && index === currentIndex && (
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-500 animate-pulse" />
+          )}
+
           {/* 遮罩层 */}
           <div className={`absolute inset-0 ${OVERLAY_STYLE.className}`} />
         </div>
