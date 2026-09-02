@@ -175,34 +175,63 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 </div>
-                <div>
+                <div className="space-y-6">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
                     {language === 'en' ? 'Professional Coaches' : '专业教练'}
                   </h3>
-                  <p className="text-gray-600 text-lg mb-8 leading-relaxed">
-                    {language === 'en'
-                      ? 'Elite coaching team with national swimming backgrounds and professional certifications. 1v1 personalized guidance to accelerate your progress.'
-                      : '具有国家队背景和专业认证的精英教练团队。1v1个性化指导，加速你的进步。'}
-                  </p>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-blue-600"></div>
-                      <span className="text-gray-700">
-                        {language === 'en' ? 'Former National Swimmers' : '前国家队成员'}
-                      </span>
+
+                  {/* Coach 1: Rick Van Der Zant */}
+                  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                        RV
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-xl font-bold text-gray-900 mb-1">
+                          Rick Van Der Zant
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="bg-blue-600 text-white px-2 py-0.5 rounded text-xs font-medium">
+                            {language === 'en' ? 'International Coach' : '国际教练'}
+                          </span>
+                          <span className="bg-cyan-600 text-white px-2 py-0.5 rounded text-xs font-medium">
+                            45 {language === 'en' ? 'Years Exp' : '年经验'}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-blue-600"></div>
-                      <span className="text-gray-700">
-                        {language === 'en' ? 'Certified Professional Trainers' : '专业认证教练'}
-                      </span>
+                    <p className="text-gray-700 leading-relaxed text-sm">
+                      {language === 'en'
+                        ? 'Internationally renowned swimming coach Rick Van Der Zant, former Australian national team swimmer with 45 years of coaching experience. Long-term collaborator with the Queensland Academy of Sport (QAS) sports science team, dedicated to building scientific and systematic training frameworks.'
+                        : '国际知名游泳教练 Rick Van Der Zant，前澳大利亚国家队运动员，拥有 45 年执教经验。长期与澳大利亚昆士兰体育学院（QAS）运动科学团队合作，专注构建科学、系统化训练体系。'}
+                    </p>
+                  </div>
+
+                  {/* Coach 2: Mach */}
+                  <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 border border-gray-200">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-gray-700 to-blue-700 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                        MC
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-xl font-bold text-gray-900 mb-1">
+                          {language === 'en' ? 'Coach Mach' : '马赫教练'}
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="bg-gray-700 text-white px-2 py-0.5 rounded text-xs font-medium">
+                            {language === 'en' ? 'Elite Coach' : '精英教练'}
+                          </span>
+                          <span className="bg-blue-700 text-white px-2 py-0.5 rounded text-xs font-medium">
+                            {language === 'en' ? 'Expert Trainer' : '专业教练'}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-blue-600"></div>
-                      <span className="text-gray-700">
-                        {language === 'en' ? '1v1 Online Coaching Available' : '提供1v1在线指导'}
-                      </span>
-                    </div>
+                    <p className="text-gray-700 leading-relaxed text-sm">
+                      {language === 'en'
+                        ? 'Coach Mach, core team member and senior assistant coach to world-renowned swimming coach Dirk Schrauwen. Bringing extensive international high-level training and tactical guidance experience, specializing in bridging world-class training philosophies with localized instruction.'
+                        : '马赫教练，国际泳坛著名教练德克（Dirk Schrauwen）核心教练团队成员、资深助理教练。拥有丰富的国际化高水平训练与赛训指导经验，擅长将世界级顶尖训练理念与本土化教学相结合。'}
+                    </p>
                   </div>
                 </div>
               </div>
