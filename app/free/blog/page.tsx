@@ -10,52 +10,19 @@ const blogPosts = [
     id: 1,
     titleKey: 'blog.post1.title',
     excerptKey: 'blog.post1.excerpt',
-    date: '2025-08-15',
-    categoryKey: 'blog.category',
-  },
-  {
-    id: 2,
-    titleKey: 'blog.post2.title',
-    excerptKey: 'blog.post2.excerpt',
-    date: '2025-08-10',
-    categoryKey: 'blog.category',
-  },
-  {
-    id: 3,
-    titleKey: 'blog.post3.title',
-    excerptKey: 'blog.post3.excerpt',
-    date: '2025-08-05',
-    categoryKey: 'blog.category',
-  },
-  {
-    id: 4,
-    titleKey: 'blog.post4.title',
-    excerptKey: 'blog.post4.excerpt',
-    date: '2025-07-28',
+    date: '2026-09-02',
     categoryKey: 'blog.category',
   },
 ];
 
 const blogContent = {
   en: {
-    'blog.post1.title': 'How Amateur Swimmers Can Plan Their Dryland Training',
-    'blog.post1.excerpt': 'Dryland training is crucial for swimming enthusiasts. This article introduces how to create a scientifically structured dryland training plan based on your personal situation...',
-    'blog.post2.title': '5 Core Dryland Training Exercises for Freestyle',
-    'blog.post2.excerpt': 'Freestyle requires strong upper body power and perfect stroke technique. These 5 dryland training exercises can help you practice effectively at home...',
-    'blog.post3.title': 'Freestyle Dryland Training Guide: Enhance Stroke Power',
-    'blog.post3.excerpt': 'Freestyle stroke power directly affects swimming speed. This article details how to enhance stroke power through dryland training...',
-    'blog.post4.title': 'Longchuan Bay Thousand Island Lake Training Base: Student Success Stories',
-    'blog.post4.excerpt': 'At the Longchuan Bay Thousand Island Lake Training Base, we have witnessed the transformation of countless amateur swimming enthusiasts. Here are the success stories of several students...',
+    'blog.post1.title': 'How Amateurs Can Build an Actionable Training Plan: From Water Feel to Systematic Progression',
+    'blog.post1.excerpt': 'For amateur swimmers, blindly piling up yardage often yields limited results. Drawing on our team\'s 2 years of practical experience organizing over 120 team training sessions for enthusiasts, this article provides a step-by-step guide to breaking down core goals, integrating specialized dryland swim training, and crafting an actionable training plan that balances work and life to break through long-standing plateaus.',
   },
   zh: {
-    'blog.post1.title': '业余游泳爱好者如何制定陆地训练计划',
-    'blog.post1.excerpt': '陆地训练对游泳爱好者至关重要。本文介绍如何根据个人情况制定科学结构的陆地训练计划...',
-    'blog.post2.title': '自由泳5个核心陆地训练动作',
-    'blog.post2.excerpt': '自由泳需要强大的上肢力量和完美的划水技术。这5个陆地训练动作可以帮助你在家有效练习...',
-    'blog.post3.title': '自由泳陆地训练指南：增强划水力量',
-    'blog.post3.excerpt': '自由泳划水力量直接影响游泳速度。本文详细介绍如何通过陆地训练增强划水力量...',
-    'blog.post4.title': '千岛湖龙川湾训练基地：学员成功案例',
-    'blog.post4.excerpt': '在千岛湖龙川湾训练基地，我们见证了无数业余游泳爱好者的蜕变。以下是几位学员的成功故事...',
+    'blog.post1.title': '业余爱好者如何制定可实施的训练计划：从水感突破到系统进阶',
+    'blog.post1.excerpt': '对于业余游泳爱好者而言，盲目堆砌游量往往效果甚微。结合我们团队2年来组织120余场业余爱好者的团队训练实践经验，手把手教你如何拆解核心目标、结合游泳陆地专项体能训练（Dryland Training），制定一份兼顾工作与生活的可执行游泳训练计划，突破长期以来的技术瓶颈。',
   },
 };
 
@@ -97,7 +64,7 @@ export default function BlogPage() {
               <h2 className="text-2xl font-bold mb-3">{getPostContent(post.titleKey)}</h2>
               <p className="text-gray-600 mb-4">{getPostContent(post.excerptKey)}</p>
               <Link
-                href="#"
+                href={`/free/blog/${post.id}`}
                 className="text-cyan-600 hover:text-cyan-700 font-medium"
               >
                 {t('blog.readMore')}
