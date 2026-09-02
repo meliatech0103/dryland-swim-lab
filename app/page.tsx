@@ -73,34 +73,197 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Why Choose Us Section */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              {t('home.features.title')}
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">
+              {language === 'en' ? 'Why Choose Us' : '为什么选择我们'}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-6">
-                <div className="text-5xl mb-4">🎯</div>
-                <h3 className="text-xl font-semibold mb-2">{t('home.features.specialized.title')}</h3>
-                <p className="text-gray-600">
-                  {t('home.features.specialized.description')}
+
+            {/* Core Data Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+              <div className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-8 text-white shadow-xl">
+                <div className="text-5xl md:text-6xl font-black mb-2">120+</div>
+                <div className="text-xl md:text-2xl font-medium mb-1">
+                  {language === 'en' ? 'Offline Training Sessions' : '线下团练场次'}
+                </div>
+                <p className="text-cyan-100 text-sm md:text-base">
+                  {language === 'en'
+                    ? 'Swimming enthusiast team training events organized'
+                    : '游泳爱好者团练活动'}
                 </p>
               </div>
-              <div className="text-center p-6">
-                <div className="text-5xl mb-4">👨‍🏫</div>
-                <h3 className="text-xl font-semibold mb-2">{t('home.features.professional.title')}</h3>
-                <p className="text-gray-600">
-                  {t('home.features.professional.description')}
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 text-white shadow-xl">
+                <div className="text-5xl md:text-6xl font-black mb-2">1500+</div>
+                <div className="text-xl md:text-2xl font-medium mb-1">
+                  {language === 'en' ? 'Total Participants' : '总参与人数'}
+                </div>
+                <p className="text-gray-300 text-sm md:text-base">
+                  {language === 'en'
+                    ? 'Swimmers who joined our training programs'
+                    : '参与训练的游泳爱好者'}
                 </p>
               </div>
-              <div className="text-center p-6">
-                <div className="text-5xl mb-4">🏊</div>
-                <h3 className="text-xl font-semibold mb-2">{t('home.features.trainingBase.title')}</h3>
-                <p className="text-gray-600">
-                  {t('home.features.trainingBase.description')}
-                </p>
+            </div>
+
+            {/* Three Core Themes */}
+            <div className="space-y-16">
+
+              {/* Professional Training */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div className="order-2 lg:order-1">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+                    {language === 'en' ? 'Professional Training' : '专业训练'}
+                  </h3>
+                  <p className="text-gray-600 text-lg mb-8 leading-relaxed">
+                    {language === 'en'
+                      ? 'Scientific training methodology based on sports physiology and biomechanics. Our training system integrates dryland and water training to maximize your performance.'
+                      : '基于运动生理学和生物力学的科学训练方法。我们的训练体系融合陆上与水上训练，最大化提升你的表现。'}
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-blue-50 rounded-xl p-4">
+                      <div className="text-3xl font-bold text-blue-600 mb-1">120+</div>
+                      <div className="text-sm text-gray-600">
+                        {language === 'en' ? 'Training Sessions' : '训练场次'}
+                      </div>
+                    </div>
+                    <div className="bg-cyan-50 rounded-xl p-4">
+                      <div className="text-3xl font-bold text-cyan-600 mb-1">4.8/5</div>
+                      <div className="text-sm text-gray-600">
+                        {language === 'en' ? 'User Rating' : '用户评分'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="order-1 lg:order-2 grid grid-cols-2 gap-4">
+                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
+                    <img
+                      src="/images/why-us/training-1.jpg"
+                      alt="Professional Training 1"
+                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
+                    <img
+                      src="/images/why-us/training-2.jpg"
+                      alt="Professional Training 2"
+                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                </div>
               </div>
+
+              {/* Professional Coaches */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
+                    <img
+                      src="/images/why-us/coach-1.jpg"
+                      alt="Professional Coach 1"
+                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
+                    <img
+                      src="/images/why-us/coach-2.jpg"
+                      alt="Professional Coach 2"
+                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+                    {language === 'en' ? 'Professional Coaches' : '专业教练'}
+                  </h3>
+                  <p className="text-gray-600 text-lg mb-8 leading-relaxed">
+                    {language === 'en'
+                      ? 'Elite coaching team with national swimming backgrounds and professional certifications. 1v1 personalized guidance to accelerate your progress.'
+                      : '具有国家队背景和专业认证的精英教练团队。1v1个性化指导，加速你的进步。'}
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-blue-600"></div>
+                      <span className="text-gray-700">
+                        {language === 'en' ? 'Former National Swimmers' : '前国家队成员'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-blue-600"></div>
+                      <span className="text-gray-700">
+                        {language === 'en' ? 'Certified Professional Trainers' : '专业认证教练'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-blue-600"></div>
+                      <span className="text-gray-700">
+                        {language === 'en' ? '1v1 Online Coaching Available' : '提供1v1在线指导'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Training Base */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div className="order-2 lg:order-1">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+                    {language === 'en' ? 'Training Base' : '训练基地'}
+                  </h3>
+                  <p className="text-gray-600 text-lg mb-8 leading-relaxed">
+                    {language === 'en'
+                      ? 'Located at Longchuan Bay, Thousand Island Lake, Zhejiang Provincial Triathlon Federation Training Base. Professional training environment with complete facilities.'
+                      : '位于浙江省千岛湖龙川湾，浙江省铁人三项训练基地。专业训练环境，设施完善。'}
+                  </p>
+                  <div className="bg-gray-50 rounded-xl p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="text-3xl">🏊</div>
+                      <div>
+                        <div className="font-semibold text-gray-900 mb-2">
+                          {language === 'en' ? 'Training Environment' : '训练环境'}
+                        </div>
+                        <p className="text-gray-600 text-sm">
+                          {language === 'en'
+                            ? 'Professional swimming pool, dryland training area, recovery facilities'
+                            : '专业泳池、陆上训练区、恢复设施'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="order-1 lg:order-2 grid grid-cols-2 gap-4">
+                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
+                    <img
+                      src="/images/why-us/base-1.jpg"
+                      alt="Training Base"
+                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
+                    <video
+                      src="/images/why-us/base-2.mp4"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-48 md:h-64 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                    <div className="absolute bottom-3 right-3">
+                      <div className="bg-white/90 backdrop-blur-sm rounded-full p-2">
+                        <svg className="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
