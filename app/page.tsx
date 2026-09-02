@@ -244,29 +244,12 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                   <div className="relative overflow-hidden rounded-2xl shadow-lg group">
-                    <video
-                      src="/images/why-us/base-2.mp4"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="auto"
-                      className="w-full h-48 md:h-64 object-cover"
-                      onCanPlay={(e) => {
-                        const video = e.target as HTMLVideoElement;
-                        video.play().catch((error) => {
-                          console.log('Auto-play failed:', error);
-                        });
-                      }}
+                    <img
+                      src="/images/why-us/base-2.jpg"
+                      alt="Training Base 2"
+                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                    <div className="absolute bottom-3 right-3">
-                      <div className="bg-white/90 backdrop-blur-sm rounded-full p-2">
-                        <svg className="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z"/>
-                        </svg>
-                      </div>
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 </div>
               </div>
