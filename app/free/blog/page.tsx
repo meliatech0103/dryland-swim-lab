@@ -64,7 +64,7 @@ export default function BlogPage() {
               <h2 className="text-2xl font-bold mb-3">{getPostContent(post.titleKey)}</h2>
               <p className="text-gray-600 mb-4">{getPostContent(post.excerptKey)}</p>
               <Link
-                href={`/free/blog/${post.id}`}
+                href={`/free/blog/article-${post.id}`}
                 className="text-cyan-600 hover:text-cyan-700 font-medium"
               >
                 {t('blog.readMore')}
