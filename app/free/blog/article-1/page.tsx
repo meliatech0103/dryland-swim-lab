@@ -8,6 +8,49 @@ import Link from 'next/link';
 export default function Article1Page() {
   const { language } = useLanguage();
 
+  const renderContent = (content: string) => {
+    // 按行分割内容
+    const lines = content.split('\n');
+    const rendered = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+
+      // 处理二级标题 (##)
+      if (line.startsWith('## ')) {
+        const titleText = line.replace('## ', '').trim();
+        rendered.push(
+          <h2 key={i} className="text-2xl font-bold mt-8 mb-4 text-gray-900">
+            {titleText}
+          </h2>
+        );
+      }
+      // 处理三级标题 (###)
+      else if (line.startsWith('### ')) {
+        const titleText = line.replace('### ', '').trim();
+        rendered.push(
+          <h3 key={i} className="text-xl font-semibold mt-6 mb-3 text-gray-900">
+            {titleText}
+          </h3>
+        );
+      }
+      // 处理空行
+      else if (line === '') {
+        rendered.push(<br key={i} />);
+      }
+      // 处理普通段落
+      else if (line !== '') {
+        rendered.push(
+          <p key={i} className="text-gray-700 leading-relaxed mb-4">
+            {line}
+          </p>
+        );
+      }
+    }
+
+    return rendered;
+  };
+
   const articleData = {
     id: '1',
     title: {
@@ -110,9 +153,7 @@ A training plan is never set in stone. After each session, record your subjectiv
             </h1>
 
             <div className="prose prose-lg max-w-none text-gray-700">
-              <div className="whitespace-pre-line leading-relaxed">
-                {articleData.content[language]}
-              </div>
+              {renderContent(articleData.content[language])}
             </div>
           </div>
         </article>
