@@ -649,8 +649,12 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
 
       return {
         day: dayPlan.day,
-        theme: dayPlan.theme,
-        totalDistance: dayPlan.totalDistance,
+        theme: formData.trainingMode === 'dryland'
+          ? (language === 'en' ? 'Dryland Training' : '陆上训练')
+          : dayPlan.theme,
+        totalDistance: formData.trainingMode === 'dryland'
+          ? ''
+          : dayPlan.totalDistance,
         intensity: dayPlan.intensity,
         waterTraining: formData.trainingMode === 'water' || formData.trainingMode === 'both' ? dayPlan.waterTraining : [],
         drylandTraining,
