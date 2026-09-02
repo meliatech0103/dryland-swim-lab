@@ -250,7 +250,14 @@ export default function Home() {
                       loop
                       muted
                       playsInline
+                      preload="auto"
                       className="w-full h-48 md:h-64 object-cover"
+                      onCanPlay={(e) => {
+                        const video = e.target as HTMLVideoElement;
+                        video.play().catch((error) => {
+                          console.log('Auto-play failed:', error);
+                        });
+                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                     <div className="absolute bottom-3 right-3">
