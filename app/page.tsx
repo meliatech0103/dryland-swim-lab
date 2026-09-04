@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ImageCarousel from '@/components/ImageCarousel';
+import StructuredData from '@/components/StructuredData';
 import { useLanguage } from '@/lib/LanguageContext';
 
 // Hero区域轮播图片配置
@@ -35,6 +36,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <StructuredData />
       <Header />
 
       <main className="flex-1">

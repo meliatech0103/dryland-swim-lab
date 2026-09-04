@@ -1,0 +1,11 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow specific paths if needed
+Disallow: /api/
+Disallow: /debug/
+Disallow: /_next/
+
+# Sitemap location
+Sitemap: https://drylandswimlab.com/sitemap.xml
