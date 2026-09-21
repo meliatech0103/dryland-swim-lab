@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useLanguage } from '@/lib/LanguageContext';
 
 interface VideoPlayerProps {
   src: string;
@@ -16,9 +17,14 @@ export default function VideoPlayer({
   unlockVideo,
 }: VideoPlayerProps) {
   const [error, setError] = useState<string | null>(null);
+  const { language } = useLanguage();
 
   const handleVideoError = () => {
-    setError('Video failed to load, please try again later');
+    setError(
+      language === 'en'
+        ? 'Video failed to load, please try again later'
+        : '视频加载失败，请稍后再试'
+    );
   };
 
   if (!unlocked) {
@@ -37,14 +43,18 @@ export default function VideoPlayer({
             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
           />
         </svg>
-        <h3 className="text-xl font-semibold mb-2">Content Locked</h3>
-        <p className="text-gray-400 mb-4">Enter password to unlock full video</p>
+        <h3 className="text-xl font-semibold mb-2">
+          {language === 'en' ? 'Content Locked' : '内容已锁定'}
+        </h3>
+        <p className="text-gray-400 mb-4">
+          {language === 'en' ? 'Enter password to unlock full video' : '输入密码解锁完整视频'}
+        </p>
         {unlockVideo && (
           <button
             onClick={unlockVideo}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
           >
-            Enter Unlock Password
+            {language === 'en' ? 'Enter Unlock Password' : '输入解锁密码'}
           </button>
         )}
       </div>
@@ -70,7 +80,9 @@ export default function VideoPlayer({
         className="w-full h-full"
         onError={handleVideoError}
       >
-        Your browser does not support video playback.
+        {language === 'en'
+          ? 'Your browser does not support video playback.'
+          : '您的浏览器不支持视频播放。'}
       </video>
     </div>
   );
