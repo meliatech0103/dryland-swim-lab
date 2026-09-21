@@ -7,6 +7,13 @@ import { useLanguage } from '@/lib/LanguageContext';
 
 const blogPosts = [
   {
+    id: 2,
+    titleKey: 'blog.post2.title',
+    excerptKey: 'blog.post2.excerpt',
+    date: '2026-09-21',
+    categoryKey: 'blog.categoryTechnique',
+  },
+  {
     id: 1,
     titleKey: 'blog.post1.title',
     excerptKey: 'blog.post1.excerpt',
@@ -19,10 +26,14 @@ const blogContent = {
   en: {
     'blog.post1.title': 'How Amateurs Can Build an Actionable Training Plan: From Water Feel to Systematic Progression',
     'blog.post1.excerpt': 'For amateur swimmers, blindly piling up yardage often yields limited results. Drawing on our team\'s 2 years of practical experience organizing over 120 team training sessions for enthusiasts, this article provides a step-by-step guide to breaking down core goals, integrating specialized dryland swim training, and crafting an actionable training plan that balances work and life to break through long-standing plateaus.',
+    'blog.post2.title': 'My Freestyle "Aha" Moments: Body Position, High Elbow Catch & Breathing Rotation',
+    'blog.post2.excerpt': 'Three game-changing insights from an amateur swimmer\'s journey: how visualizing a drawn bow transformed my body position, why pointing my elbow to the sky unlocked the catch, and how "flirting" hips finally fixed my breathing rotation. Plain-language tips from fellow swimmers that changed everything.',
   },
   zh: {
     'blog.post1.title': '业余爱好者如何制定可实施的训练计划：从水感突破到系统进阶',
     'blog.post1.excerpt': '对于业余游泳爱好者而言，盲目堆砌游量往往效果甚微。结合我们团队2年来组织120余场业余爱好者的团队训练实践经验，手把手教你如何拆解核心目标、结合游泳陆地专项体能训练（Dryland Training），制定一份兼顾工作与生活的可执行游泳训练计划，突破长期以来的技术瓶颈。',
+    'blog.post2.title': '我的自由泳开悟时刻：身体姿态、高肘抱水与换气转体',
+    'blog.post2.excerpt': '三个改变我自由泳的"开悟时刻"：满弓之箭如何重塑身体姿态、肘尖指天如何解锁高肘抱水、以及"撒娇式"髋部发力如何修正换气转体。来自泳友的大白话指点，简单却颠覆认知。',
   },
 };
 

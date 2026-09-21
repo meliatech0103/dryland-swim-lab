@@ -251,6 +251,7 @@ export function useTranslation(language: Language) {
       title: 'Freestyle Training Plans & Tips',
       description: 'Professional freestyle dryland training plans, technique sharing, and student success stories',
       category: 'Training Plans',
+      categoryTechnique: 'Technique',
       readMore: 'Read More →',
       cta: {
         title: 'Want to Learn Freestyle Dryland Training Systematically?',
@@ -509,6 +510,7 @@ export function useTranslation(language: Language) {
       title: '自由泳训练计划与技巧',
       description: '专业自由泳陆地训练计划、技术分享和学员成功故事',
       category: '训练计划',
+      categoryTechnique: '技术心得',
       readMore: '阅读更多 →',
       cta: {
         title: '想要系统学习自由泳陆地训练吗？',
