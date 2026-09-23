@@ -1,13 +1,26 @@
 'use client';
 
+import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useLanguage } from '@/lib/LanguageContext';
 import { lessons } from '@/lib/lessons';
+import Link from 'next/link';
 
 export default function PaidPage() {
   const { language } = useLanguage();
-  const lesson = lessons[0]; // 单一产品：自由泳陆上训练课程
+  const lesson = lessons[0];
+  const [email, setEmail] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      setIsSubmitted(true);
+    }
+  };
+
+  const hasCreemLink = lesson.creemLink && lesson.creemLink !== '#';
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -35,7 +48,7 @@ export default function PaidPage() {
               </p>
             </div>
 
-            {/* 右侧：课程信息 + 购买 */}
+            {/* 右侧：课程信息 */}
             <div className="p-8 md:p-10 flex flex-col justify-center">
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
                 {lesson.title[language]}
@@ -54,7 +67,7 @@ export default function PaidPage() {
                 ))}
               </ul>
 
-              {/* 价格 + 购买 */}
+              {/* 价格 + 操作区 */}
               <div className="bg-gray-50 rounded-xl p-6">
                 <div className="flex items-baseline gap-2 mb-4">
                   <span className="text-4xl font-black text-gray-900">${lesson.price}</span>
@@ -66,112 +79,135 @@ export default function PaidPage() {
                   </span>
                 </div>
 
-                {lesson.creemLink && lesson.creemLink !== '#' ? (
-                  <a
-                    href={lesson.creemLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full text-center py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-lg rounded-xl hover:from-cyan-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl"
-                  >
-                    {language === 'en' ? 'Buy Now — $9.9' : '立即购买 — $9.9'}
-                  </a>
+                {hasCreemLink ? (
+                  /* Creem 链接已配置：显示购页按钮 */
+                  <>
+                    <a
+                      href={lesson.creemLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full text-center py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-lg rounded-xl hover:from-cyan-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl"
+                    >
+                      {language === 'en' ? 'Buy Now — $9.9' : '立即购买 — $9.9'}
+                    </a>
+                    <a
+                      href={`/paid/lesson/${lesson.id}`}
+                      className="block w-full text-center py-2 mt-3 text-cyan-600 text-sm font-medium hover:text-cyan-700 transition-colors"
+                    >
+                      {language === 'en'
+                        ? 'Already purchased? Enter password →'
+                        : '已购买？输入密码解锁 →'}
+                    </a>
+                  </>
                 ) : (
-                  <a
-                    href={`/paid/lesson/${lesson.id}`}
-                    className="block w-full text-center py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-lg rounded-xl hover:from-cyan-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl"
-                  >
-                    {language === 'en' ? 'View Course' : '查看课程'}
-                  </a>
-                )}
+                  /* Creem 链接未配置：显示即将上线 */
+                  <>
+                    <div className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl p-4 text-white text-center mb-4">
+                      <div className="text-lg font-bold mb-1">
+                        {language === 'en' ? 'Course Coming Soon' : '课程即将上线'}
+                      </div>
+                      <p className="text-cyan-100 text-sm">
+                        {language === 'en'
+                          ? 'Leave your email to get notified when it launches'
+                          : '留下邮箱，课程上线时第一时间通知您'}
+                      </p>
+                    </div>
 
-                <a
-                  href={`/paid/lesson/${lesson.id}`}
-                  className="block w-full text-center py-2 mt-3 text-cyan-600 text-sm font-medium hover:text-cyan-700 transition-colors"
-                >
-                  {language === 'en'
-                    ? 'Already purchased? Enter password →'
-                    : '已购买？输入密码解锁 →'}
-                </a>
+                    {!isSubmitted ? (
+                      <form onSubmit={handleSubmit} className="mb-3">
+                        <div className="flex gap-3">
+                          <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder={language === 'en' ? 'Enter your email' : '输入您的邮箱'}
+                            required
+                            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                          />
+                          <button
+                            type="submit"
+                            className="px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors"
+                          >
+                            {language === 'en' ? 'Notify Me' : '通知我'}
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-3 text-center">
+                        <span className="text-green-700 font-medium text-sm">
+                          ✓ {language === 'en' ? 'You\'re on the list!' : '预约成功！'}
+                        </span>
+                      </div>
+                    )}
+
+                    <a
+                      href={`/paid/lesson/${lesson.id}`}
+                      className="block w-full text-center py-2 text-cyan-600 text-sm font-medium hover:text-cyan-700 transition-colors"
+                    >
+                      {language === 'en'
+                        ? 'Already purchased? Enter password →'
+                        : '已购买？输入密码解锁 →'}
+                    </a>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* 支付方式说明 */}
-        <div className="bg-white rounded-2xl shadow-md p-8 mb-12">
-          <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">
-            {language === 'en' ? 'Secure Payment Options' : '安全支付方式'}
+        {/* 课程详情入口 */}
+        <div className="bg-white rounded-2xl shadow-md p-8 mb-12 text-center">
+          <h3 className="text-xl font-bold text-gray-900 mb-3">
+            {language === 'en' ? 'Preview the Course' : '预览课程内容'}
           </h3>
-          <div className="flex flex-wrap justify-center gap-6 items-center">
-            <div className="flex items-center gap-2 text-gray-600">
-              <span className="text-2xl">💳</span>
-              <span className="text-sm">{language === 'en' ? 'Credit/Debit Card' : '信用卡/借记卡'}</span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-600">
-              <span className="text-2xl">🍎</span>
-              <span className="text-sm">Apple Pay</span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-600">
-              <span className="text-2xl">📱</span>
-              <span className="text-sm">Google Pay</span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-600">
-              <span className="text-2xl">💚</span>
-              <span className="text-sm">{language === 'en' ? 'WeChat Pay' : '微信支付'}</span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-600">
-              <span className="text-2xl">🔵</span>
-              <span className="text-sm">{language === 'en' ? 'Alipay' : '支付宝'}</span>
-            </div>
-          </div>
-          <p className="text-gray-400 text-xs text-center mt-4">
+          <p className="text-gray-600 mb-6">
             {language === 'en'
-              ? 'Powered by Creem.io — Secure checkout, instant delivery, 30-day refund guarantee'
-              : '由 Creem.io 提供支付服务 — 安全结算，即时交付，30天退款保证'}
+              ? 'Watch the free preview and explore the course structure. If you already have a password, you can unlock the full content.'
+              : '观看免费预览，了解课程结构。如果您已有密码，可以解锁完整内容。'}
           </p>
+          <Link
+            href={`/paid/lesson/${lesson.id}`}
+            className="inline-block px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold rounded-lg hover:from-cyan-700 hover:to-blue-700 transition-all shadow-md"
+          >
+            {language === 'en' ? 'View Course Details' : '查看课程详情'} →
+          </Link>
         </div>
 
-        {/* 购买流程说明 */}
-        <div className="bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl p-8 text-white text-center">
-          <h3 className="text-2xl font-bold mb-6">
-            {language === 'en' ? 'How It Works' : '购买流程'}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <div className="w-12 h-12 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-3 text-2xl font-bold">1</div>
-              <h4 className="font-semibold mb-1">
-                {language === 'en' ? 'Purchase' : '购买课程'}
-              </h4>
-              <p className="text-cyan-100 text-sm">
-                {language === 'en'
-                  ? 'Complete secure checkout via Creem.io'
-                  : '通过 Creem.io 完成安全支付'}
-              </p>
+        {/* 支付方式说明 - 仅在 Creem 链接配置后显示 */}
+        {hasCreemLink && (
+          <div className="bg-white rounded-2xl shadow-md p-8 mb-12">
+            <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">
+              {language === 'en' ? 'Secure Payment Options' : '安全支付方式'}
+            </h3>
+            <div className="flex flex-wrap justify-center gap-6 items-center">
+              <div className="flex items-center gap-2 text-gray-600">
+                <span className="text-2xl">💳</span>
+                <span className="text-sm">{language === 'en' ? 'Credit/Debit Card' : '信用卡/借记卡'}</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600">
+                <span className="text-2xl">🍎</span>
+                <span className="text-sm">Apple Pay</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600">
+                <span className="text-2xl">📱</span>
+                <span className="text-sm">Google Pay</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600">
+                <span className="text-2xl">💚</span>
+                <span className="text-sm">{language === 'en' ? 'WeChat Pay' : '微信支付'}</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600">
+                <span className="text-2xl">🔵</span>
+                <span className="text-sm">{language === 'en' ? 'Alipay' : '支付宝'}</span>
+              </div>
             </div>
-            <div>
-              <div className="w-12 h-12 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-3 text-2xl font-bold">2</div>
-              <h4 className="font-semibold mb-1">
-                {language === 'en' ? 'Receive Password' : '获取密码'}
-              </h4>
-              <p className="text-cyan-100 text-sm">
-                {language === 'en'
-                  ? 'Unlock password sent to your email instantly'
-                  : '解锁密码即时发送至您的邮箱'}
-              </p>
-            </div>
-            <div>
-              <div className="w-12 h-12 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-3 text-2xl font-bold">3</div>
-              <h4 className="font-semibold mb-1">
-                {language === 'en' ? 'Start Training' : '开始训练'}
-              </h4>
-              <p className="text-cyan-100 text-sm">
-                {language === 'en'
-                  ? 'Enter password on course page, unlock full video'
-                  : '在课程页输入密码，解锁完整视频'}
-              </p>
-            </div>
+            <p className="text-gray-400 text-xs text-center mt-4">
+              {language === 'en'
+                ? 'Powered by Creem.io — Secure checkout, instant delivery, 30-day refund guarantee'
+                : '由 Creem.io 提供支付服务 — 安全结算，即时交付，30天退款保证'}
+            </p>
           </div>
-        </div>
+        )}
       </main>
 
       <Footer />

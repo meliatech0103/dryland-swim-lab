@@ -124,12 +124,12 @@ export default function LessonPage() {
             </h2>
             <p className="mb-6 text-cyan-100">
               {language === 'en'
-                ? `Full course: ${lesson.sessions} sessions (${formatDuration(lesson.video.duration)} total). Purchase to unlock the complete training program.`
-                : `完整课程：${lesson.sessions}节（总计${formatDuration(lesson.video.duration)}）。购买后解锁完整训练。`}
+                ? `Full course: ${lesson.sessions} sessions (${formatDuration(lesson.video.duration)} total). Enter your password to unlock the complete training program.`
+                : `完整课程：${lesson.sessions}节（总计${formatDuration(lesson.video.duration)}）。输入密码解锁完整训练。`}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              {/* Creem 购买按钮 */}
+              {/* Creem 购买按钮 - 仅在链接配置后显示 */}
               {lesson.creemLink && lesson.creemLink !== '#' ? (
                 <a
                   href={lesson.creemLink}
@@ -137,7 +137,7 @@ export default function LessonPage() {
                   rel="noopener noreferrer"
                   className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors inline-block"
                 >
-                  {language === 'en' ? `Buy for $${lesson.price}` : `购买 ¥${lesson.price}`}
+                  {language === 'en' ? `Buy for $${lesson.price}` : `购买 $${lesson.price}`}
                 </a>
               ) : null}
 
@@ -154,11 +154,19 @@ export default function LessonPage() {
               </button>
             </div>
 
-            <p className="text-cyan-200 text-sm mt-4">
-              {language === 'en'
-                ? '💡 Password is sent to your email after purchase via Creem.io'
-                : '💡 购买后密码将通过 Creem.io 自动发送至您的邮箱'}
-            </p>
+            {lesson.creemLink && lesson.creemLink !== '#' ? (
+              <p className="text-cyan-200 text-sm mt-4">
+                {language === 'en'
+                  ? '💡 Password is sent to your email after purchase via Creem.io'
+                  : '💡 购买后密码将通过 Creem.io 自动发送至您的邮箱'}
+              </p>
+            ) : (
+              <p className="text-cyan-200 text-sm mt-4">
+                {language === 'en'
+                  ? '💡 If you have already purchased, enter the password from your purchase confirmation email'
+                  : '💡 如果您已购买，请输入购买确认邮件中的密码'}
+              </p>
+            )}
           </div>
         )}
 
