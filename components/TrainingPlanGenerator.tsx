@@ -985,10 +985,10 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
                 <h3 className="text-xl font-bold mb-4">{t('calc.generated.recommend.title')}</h3>
                 <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
                   <div className="flex justify-between items-center mb-3">
-                    <h4 className="text-lg font-bold">{recommendedCourse.title}</h4>
+                    <h4 className="text-lg font-bold">{typeof recommendedCourse.title === 'string' ? recommendedCourse.title : recommendedCourse.title[language]}</h4>
                     <span className="text-2xl font-bold">{formatPrice(recommendedCourse.price)}</span>
                   </div>
-                  <p className="mb-4 text-white/90">{recommendedCourse.description}</p>
+                  <p className="mb-4 text-white/90">{typeof recommendedCourse.description === 'string' ? recommendedCourse.description : recommendedCourse.description[language]}</p>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="bg-white/20 px-3 py-1 rounded text-sm">
                       {t('calc.generated.recommend.sessions', {
