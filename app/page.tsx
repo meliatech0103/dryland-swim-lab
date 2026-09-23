@@ -82,28 +82,28 @@ export default function Home() {
               {language === 'en' ? 'Why Choose Us' : '为什么选择我们'}
             </h2>
 
-            {/* Core Data Stats */}
+            {/* Core Value Proposition */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
               <div className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-8 text-white shadow-xl">
-                <div className="text-5xl md:text-6xl font-black mb-2">120+</div>
+                <div className="text-4xl md:text-5xl font-black mb-2">🏊‍♂️</div>
                 <div className="text-xl md:text-2xl font-medium mb-1">
-                  {language === 'en' ? 'Offline Training Sessions' : '线下团练场次'}
+                  {language === 'en' ? 'Scientific Training System' : '科学训练体系'}
                 </div>
                 <p className="text-cyan-100 text-sm md:text-base">
                   {language === 'en'
-                    ? 'Swimming enthusiast team training events organized'
-                    : '游泳爱好者团练活动'}
+                    ? 'Methodology built on sports physiology and biomechanics, integrating dryland and water training'
+                    : '基于运动生理学和生物力学的训练方法，融合陆上与水上训练'}
                 </p>
               </div>
               <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 text-white shadow-xl">
-                <div className="text-5xl md:text-6xl font-black mb-2">1500+</div>
+                <div className="text-4xl md:text-5xl font-black mb-2">🌍</div>
                 <div className="text-xl md:text-2xl font-medium mb-1">
-                  {language === 'en' ? 'Total Participants' : '总参与人数'}
+                  {language === 'en' ? 'International Coaching Team' : '国际化教练团队'}
                 </div>
                 <p className="text-gray-300 text-sm md:text-base">
                   {language === 'en'
-                    ? 'Swimmers who joined our training programs'
-                    : '参与训练的游泳爱好者'}
+                    ? 'Led by former Australian national team swimmers and world-renowned coach teams'
+                    : '由前澳大利亚国家队运动员和国际知名教练团队领衔'}
                 </p>
               </div>
             </div>
@@ -124,15 +124,15 @@ export default function Home() {
                   </p>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-blue-50 rounded-xl p-4">
-                      <div className="text-3xl font-bold text-blue-600 mb-1">120+</div>
+                      <div className="text-2xl font-bold text-blue-600 mb-1">💪</div>
                       <div className="text-sm text-gray-600">
-                        {language === 'en' ? 'Training Sessions' : '训练场次'}
+                        {language === 'en' ? 'Dryland + Water Integration' : '陆水结合训练'}
                       </div>
                     </div>
                     <div className="bg-cyan-50 rounded-xl p-4">
-                      <div className="text-3xl font-bold text-cyan-600 mb-1">4.8/5</div>
+                      <div className="text-2xl font-bold text-cyan-600 mb-1">🎯</div>
                       <div className="text-sm text-gray-600">
-                        {language === 'en' ? 'User Rating' : '用户评分'}
+                        {language === 'en' ? 'Personalized Progression' : '个性化进阶'}
                       </div>
                     </div>
                   </div>

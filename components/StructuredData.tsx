@@ -29,14 +29,7 @@ export default function StructuredData() {
         "closes": "20:00"
       }
     ],
-    "priceRange": "$$",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "120",
-      "bestRating": "5",
-      "worstRating": "1"
-    }
+    "priceRange": "$$"
   };
 
   const articleStructuredData = {

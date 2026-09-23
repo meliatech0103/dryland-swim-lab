@@ -71,6 +71,15 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+          <div className="flex justify-center gap-4 mb-3">
+            <Link href="/free/terms" className="hover:text-white transition">
+              {language === 'en' ? 'Terms of Service' : '服务条款'}
+            </Link>
+            <span>|</span>
+            <Link href="/free/privacy" className="hover:text-white transition">
+              {language === 'en' ? 'Privacy Policy' : '隐私政策'}
+            </Link>
+          </div>
           <p>{t('footer.rights')}</p>
         </div>
       </div>
