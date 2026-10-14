@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -10,16 +9,6 @@ import Link from 'next/link';
 export default function PaidPage() {
   const { language } = useLanguage();
   const lesson = lessons[0];
-  const [email, setEmail] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setIsSubmitted(true);
-    }
-  };
-
   const hasCreemLink = lesson.creemLink && lesson.creemLink !== '#';
 
   return (
@@ -104,41 +93,14 @@ export default function PaidPage() {
                   <>
                     <div className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl p-4 text-white text-center mb-4">
                       <div className="text-lg font-bold mb-1">
-                        {language === 'en' ? 'Course Coming Soon' : '课程即将上线'}
+                        {language === 'en' ? 'Course in Preparation' : '课程正在制作中'}
                       </div>
                       <p className="text-cyan-100 text-sm">
                         {language === 'en'
-                          ? 'Leave your email to get notified when it launches'
-                          : '留下邮箱，课程上线时第一时间通知您'}
+                          ? 'Sales are not open yet. Preview the course while we prepare the full video program.'
+                          : '课程尚未开放购买。您可以先预览课程，我们正在准备完整视频内容。'}
                       </p>
                     </div>
-
-                    {!isSubmitted ? (
-                      <form onSubmit={handleSubmit} className="mb-3">
-                        <div className="flex gap-3">
-                          <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder={language === 'en' ? 'Enter your email' : '输入您的邮箱'}
-                            required
-                            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                          />
-                          <button
-                            type="submit"
-                            className="px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors"
-                          >
-                            {language === 'en' ? 'Notify Me' : '通知我'}
-                          </button>
-                        </div>
-                      </form>
-                    ) : (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-3 text-center">
-                        <span className="text-green-700 font-medium text-sm">
-                          ✓ {language === 'en' ? 'You\'re on the list!' : '预约成功！'}
-                        </span>
-                      </div>
-                    )}
 
                     <a
                       href={`/paid/lesson/${lesson.id}`}

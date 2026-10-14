@@ -14,7 +14,7 @@ export function useTranslation(language: Language) {
 
     // Footer
     footer: {
-      rights: '© 2025 Dryland Swim Lab. All rights reserved.',
+      rights: '© 2026 Dryland Swim Lab. All rights reserved.',
     },
 
     // Home Page
@@ -273,7 +273,7 @@ export function useTranslation(language: Language) {
 
     // Footer
     footer: {
-      rights: '© 2025 Dryland Swim Lab. 保留所有权利。',
+      rights: '© 2026 Dryland Swim Lab. 保留所有权利。',
     },
 
     // Home Page
