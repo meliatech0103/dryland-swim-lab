@@ -10,7 +10,6 @@ import VideoPlayer from '@/components/VideoPlayer';
 import UnlockModal from '@/components/UnlockModal';
 import { useLanguage } from '@/lib/LanguageContext';
 import Icon from '@/components/Icon';
-import Icon from '@/components/Icon';
 
 export default function LessonPage() {
   const params = useParams();
