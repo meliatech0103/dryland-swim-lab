@@ -1341,7 +1341,9 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
 
       {/* 分享海报：2:3 画布 1024×1536，下半部训练面板，数据与样式分离 */}
       {generatedPlan && (() => {
-        const dayCount = generatedPlan.length;
+        // Keep the saved poster layout focused on workout sessions; the on-page plan still shows recovery days.
+        const posterDays = generatedPlan.filter((day) => !day.restDay);
+        const dayCount = posterDays.length;
         const density = getDensity(dayCount);
         const grid = getGridLayout(dayCount, density);
         const sp = spacingScales[density];
@@ -1378,8 +1380,8 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
         // 奇数天或 1 天：拆分前后两组
         const isOddLast = grid.lastCardCentered;
         const isSingleDay = dayCount === 1;
-        const frontDays = isOddLast ? generatedPlan.slice(0, -1) : generatedPlan;
-        const lastDay = (isOddLast || isSingleDay) ? generatedPlan[generatedPlan.length - 1] : null;
+        const frontDays = isOddLast ? posterDays.slice(0, -1) : posterDays;
+        const lastDay = (isOddLast || isSingleDay) ? posterDays[posterDays.length - 1] : null;
         // 1 天时 frontDays 为空（全走居中卡片），奇数天时前面满 2 列
         const effectiveFrontDays = isSingleDay ? [] : frontDays;
 
@@ -1590,7 +1592,7 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
                 {/* 奇数天最后一张卡片：居中、等宽 */}
                 {lastDay && (
                   <div style={{ marginTop: grid.gap.split(' ')[0], display: 'flex', justifyContent: 'center' }}>
-                    {renderCard(lastDay, generatedPlan.length - 1, true)}
+                    {renderCard(lastDay, posterDays.length - 1, true)}
                   </div>
                 )}
 
