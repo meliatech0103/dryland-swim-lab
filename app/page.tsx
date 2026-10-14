@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ImageCarousel from '@/components/ImageCarousel';
 import StructuredData from '@/components/StructuredData';
+import Icon from '@/components/Icon';
 import { useLanguage } from '@/lib/LanguageContext';
 
 // Hero区域轮播图片配置
@@ -24,32 +25,44 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative min-h-[600px] py-20">
+        <section className="relative isolate flex min-h-[620px] items-center overflow-hidden py-16 sm:py-20">
           {/* 背景图片轮播 */}
           <div className="absolute inset-0 h-full z-0">
             <ImageCarousel images={heroImages} interval={6000} />
           </div>
+          <div className="absolute inset-0 z-[1] bg-gradient-to-r from-slate-950/80 via-blue-950/55 to-slate-900/10" />
+          <div className="absolute inset-0 z-[1] bg-gradient-to-t from-slate-950/35 via-transparent to-slate-950/10" />
 
           {/* Hero 内容 */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center pt-16">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg text-gray-900">
-                {t('home.hero.title')}<br className="hidden md:inline" />
-                {t('home.hero.subtitle')}
+          <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl rounded-[2rem] border border-white/40 bg-white/90 p-6 shadow-2xl shadow-slate-950/20 backdrop-blur-md sm:p-10 lg:p-12">
+              <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3.5 py-2 text-xs font-bold uppercase tracking-[0.18em] text-cyan-800">
+                <span className="h-2 w-2 rounded-full bg-cyan-500" />
+                {language === 'en' ? 'Coach-led · Swim-specific · Built for amateurs' : '教练设计 · 自由泳专项 · 面向业余泳者'}
+              </p>
+              <h1 className="mb-5 max-w-2xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
+                {t('home.hero.title')}<br />
+                <span className="text-blue-700">{t('home.hero.subtitle')}</span>
               </h1>
-              <p className="text-xl md:text-2xl mb-8 drop-shadow-md text-gray-800">
+              <p className="mb-8 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
                 {t('home.hero.description')}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center relative z-20">
+              <div className="mb-8 flex flex-wrap gap-2.5 text-sm font-semibold text-slate-700">
+                {[language === 'en' ? '3 guided sessions' : '3 节视频课程', language === 'en' ? '15 minutes each' : '每节 15 分钟', language === 'en' ? 'Strength + body control' : '力量与身体控制'].map((item) => (
+                  <span key={item} className="rounded-full border border-slate-200 bg-white px-3.5 py-2">{item}</span>
+                ))}
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/free/calc"
-                  className="px-8 py-4 rounded-lg font-semibold transition-colors shadow-lg bg-blue-600 text-white hover:bg-blue-700 relative z-20"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-700 px-6 py-3.5 font-bold text-white shadow-lg shadow-blue-900/20 transition hover:-translate-y-0.5 hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
                 >
                   {t('home.hero.tryFree')}
+                  <Icon name="arrow" className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/paid"
-                  className="px-8 py-4 rounded-lg font-semibold transition-colors shadow-lg backdrop-blur-sm border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white relative z-20"
+                  className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-bold text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
                 >
                   {t('home.hero.viewCourse')}
                 </Link>
@@ -68,7 +81,7 @@ export default function Home() {
             {/* Core Value Proposition */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
               <div className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-8 text-white shadow-xl">
-                <div className="text-4xl md:text-5xl font-black mb-2">🏊‍♂️</div>
+                <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-cyan-100"><Icon name="water" className="h-8 w-8" /></div>
                 <div className="text-xl md:text-2xl font-medium mb-1">
                   {language === 'en' ? 'Scientific Training System' : '科学训练体系'}
                 </div>
@@ -79,7 +92,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 text-white shadow-xl">
-                <div className="text-4xl md:text-5xl font-black mb-2">🌍</div>
+                <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-cyan-200"><Icon name="globe" className="h-8 w-8" /></div>
                 <div className="text-xl md:text-2xl font-medium mb-1">
                   {language === 'en' ? 'International Coaching Team' : '国际化教练团队'}
                 </div>
@@ -107,13 +120,13 @@ export default function Home() {
                   </p>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-blue-50 rounded-xl p-4">
-                      <div className="text-2xl font-bold text-blue-600 mb-1">💪</div>
+                      <div className="mb-2 text-blue-600"><Icon name="strength" className="h-6 w-6" /></div>
                       <div className="text-sm text-gray-600">
                         {language === 'en' ? 'Dryland + Water Integration' : '陆水结合训练'}
                       </div>
                     </div>
                     <div className="bg-cyan-50 rounded-xl p-4">
-                      <div className="text-2xl font-bold text-cyan-600 mb-1">🎯</div>
+                      <div className="mb-2 text-cyan-600"><Icon name="target" className="h-6 w-6" /></div>
                       <div className="text-sm text-gray-600">
                         {language === 'en' ? 'Personalized Progression' : '个性化进阶'}
                       </div>
@@ -161,7 +174,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="space-y-6">
-                  <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+                  <h3 id="coaches" className="scroll-mt-24 text-2xl md:text-3xl font-bold mb-6 text-gray-900">
                     {language === 'en' ? 'Professional Coaches' : '专业教练'}
                   </h3>
 
@@ -234,7 +247,7 @@ export default function Home() {
                   </p>
                   <div className="bg-gray-50 rounded-xl p-6">
                     <div className="flex items-start gap-4">
-                      <div className="text-3xl">🏊</div>
+                      <div className="text-cyan-600"><Icon name="pool" className="h-8 w-8" /></div>
                       <div>
                         <div className="font-semibold text-gray-900 mb-2">
                           {language === 'en' ? 'Training Environment' : '训练环境'}
@@ -272,6 +285,49 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="bg-slate-50 py-16 sm:py-20">
+          <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:px-8">
+            <div>
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-cyan-700">
+                {language === 'en' ? 'From the swimming community' : '来自泳友的经验'}
+              </p>
+              <h2 className="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+                {language === 'en' ? 'Small cues can change a stroke.' : '一句动作提示，也能带来新的水感。'}
+              </h2>
+              <p className="mt-4 max-w-xl text-slate-600">
+                {language === 'en'
+                  ? 'A swimmer shares how slowing down the catch helped them find a steadier high-elbow position.'
+                  : '一位业余泳者分享：放慢抱水动作后，自己逐渐找到了更稳定的高肘位置。'}
+              </p>
+            </div>
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+              <div className="mb-4 flex items-center gap-3">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
+                  <Icon name="water" className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="font-semibold text-slate-900">{language === 'en' ? 'Swimmer story · Technique note' : '泳友故事 · 技术心得'}</p>
+                  <p className="text-sm text-slate-500">{language === 'en' ? 'Shared by an amateur swimmer' : '来自业余泳者的真实经验分享'}</p>
+                </div>
+              </div>
+              <p className="text-lg leading-8 text-slate-700">
+                {language === 'en'
+                  ? 'A swimmer’s takeaway: slow the catch down, find the high-elbow position first, then build speed through the push.'
+                  : '泳友心得：把抱水动作放慢，先找到高肘位置，再在推水阶段发力。'}
+              </p>
+              <Link href="/free/blog/article-2" className="mt-6 inline-flex items-center gap-2 font-bold text-blue-700 hover:text-blue-900">
+                {language === 'en' ? 'Read the swimmer’s story' : '阅读完整泳友分享'}
+                <Icon name="arrow" className="h-4 w-4" />
+              </Link>
+              <p className="mt-4 text-xs leading-5 text-slate-400">
+                {language === 'en'
+                  ? 'Community experience, not a review of the paid course.'
+                  : '此处为泳友经验分享，并非付费课程评价。'}
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Course Preview - Coming Soon */}
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -284,10 +340,7 @@ export default function Home() {
               <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                 {/* 课程视觉区域 */}
                 <div className="aspect-video bg-gradient-to-br from-cyan-600 to-blue-600 flex flex-col items-center justify-center text-white relative">
-                  {/* 时钟图标 */}
-                  <div className="text-6xl mb-4 animate-pulse">
-                    ⏰
-                  </div>
+                  <div className="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-white/25 bg-white/10 text-white"><Icon name="book" className="h-8 w-8" /></div>
                   {/* Coming Soon 标签 */}
                   <div className="bg-white/20 backdrop-blur-sm rounded-full px-6 py-2 mb-4">
                     <span className="text-lg font-medium">
@@ -315,7 +368,7 @@ export default function Home() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div className="flex items-start gap-3 bg-cyan-50 rounded-lg p-4">
                       <div className="flex-shrink-0 w-8 h-8 bg-cyan-500/20 rounded-full flex items-center justify-center">
-                        <span className="text-cyan-600">🎁</span>
+                        <Icon name="book" className="h-4 w-4 text-cyan-700" />
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900 mb-1">
@@ -332,7 +385,7 @@ export default function Home() {
 
                     <div className="flex items-start gap-3 bg-blue-50 rounded-lg p-4">
                       <div className="flex-shrink-0 w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600">📊</span>
+                        <Icon name="clock" className="h-4 w-4 text-blue-700" />
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900 mb-1">
@@ -375,17 +428,17 @@ export default function Home() {
             {/* Course Highlights */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
               <div className="bg-white p-6 rounded-lg shadow-md text-center">
-                <div className="text-4xl mb-3">💪</div>
+                <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-700"><Icon name="strength" className="h-6 w-6" /></div>
                 <h4 className="font-semibold text-gray-900 mb-2">{t('home.course.highlights.core.title')}</h4>
                 <p className="text-sm text-gray-600">{t('home.course.highlights.core.description')}</p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md text-center">
-                <div className="text-4xl mb-3">⚡</div>
+                <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-700"><Icon name="bolt" className="h-6 w-6" /></div>
                 <h4 className="font-semibold text-gray-900 mb-2">{t('home.course.highlights.speed.title')}</h4>
                 <p className="text-sm text-gray-600">{t('home.course.highlights.speed.description')}</p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md text-center">
-                <div className="text-4xl mb-3">🎯</div>
+                <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700"><Icon name="target" className="h-6 w-6" /></div>
                 <h4 className="font-semibold text-gray-900 mb-2">{t('home.course.highlights.technique.title')}</h4>
                 <p className="text-sm text-gray-600">{t('home.course.highlights.technique.description')}</p>
               </div>

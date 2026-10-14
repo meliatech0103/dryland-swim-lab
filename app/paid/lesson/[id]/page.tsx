@@ -9,6 +9,8 @@ import Footer from '@/components/Footer';
 import VideoPlayer from '@/components/VideoPlayer';
 import UnlockModal from '@/components/UnlockModal';
 import { useLanguage } from '@/lib/LanguageContext';
+import Icon from '@/components/Icon';
+import Icon from '@/components/Icon';
 
 export default function LessonPage() {
   const params = useParams();
@@ -157,14 +159,14 @@ export default function LessonPage() {
             {lesson.creemLink && lesson.creemLink !== '#' ? (
               <p className="text-cyan-200 text-sm mt-4">
                 {language === 'en'
-                  ? '💡 Password is sent to your email after purchase via Creem.io'
-                  : '💡 购买后密码将通过 Creem.io 自动发送至您的邮箱'}
+                  ? 'Password is sent to your email after purchase via Creem.io'
+                  : '购买后密码将通过 Creem.io 自动发送至您的邮箱'}
               </p>
             ) : (
               <p className="text-cyan-200 text-sm mt-4">
                 {language === 'en'
-                  ? '💡 If you have already purchased, enter the password from your purchase confirmation email'
-                  : '💡 如果您已购买，请输入购买确认邮件中的密码'}
+                  ? 'If you have already purchased, enter the password from your purchase confirmation email'
+                  : '如果您已购买，请输入购买确认邮件中的密码'}
               </p>
             )}
           </div>
@@ -184,7 +186,7 @@ export default function LessonPage() {
             ))}
 
             <div className="flex items-start gap-3">
-              <span className="text-2xl">📚</span>
+                <Icon name="book" className="mt-1 h-6 w-6 flex-none text-cyan-600" />
               <div>
                 <h3 className="font-semibold text-gray-900 mb-1">
                   {language === 'en' ? 'Complete Training Guide' : '完整训练指导'}
@@ -197,7 +199,7 @@ export default function LessonPage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <span className="text-2xl">🎯</span>
+                <Icon name="target" className="mt-1 h-6 w-6 flex-none text-cyan-600" />
               <div>
                 <h3 className="font-semibold text-gray-900 mb-1">
                   {language === 'en' ? 'Results-Driven' : '效果导向'}

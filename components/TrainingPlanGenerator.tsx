@@ -4,7 +4,62 @@ import { useState, useRef } from 'react';
 import { lessons, formatPrice } from '@/lib/lessons';
 import { useLanguage } from '@/lib/LanguageContext';
 import html2canvas from 'html2canvas';
-import QRCode from 'qrcode';
+import Icon, { type IconName } from '@/components/Icon';
+
+// ─── 游泳分享摘要结构 ──────────────────────────────
+type SwimPhase = 'warm-up' | 'main-set' | 'technique' | 'cool-down' | 'interval';
+
+interface SwimShareBlock {
+  phase: SwimPhase;
+  label: string;       // 大写阶段标签，如 "MAIN SET"
+  distance?: string;   // "2000m", "4 × 100m"
+  stroke?: string;     // "Freestyle"
+  details?: string[];  // 间歇/配速/休息分行
+}
+
+// 英文游泳每日分享摘要（按天索引 0=Mon ... 6=Sun）
+const swimShareEn: SwimShareBlock[][] = [
+  // Monday
+  [
+    { phase: 'main-set', label: 'MAIN SET', distance: '2000m', stroke: 'Freestyle', details: ['Steady pace'] },
+  ],
+  // Tuesday
+  [
+    { phase: 'main-set', label: 'MAIN SET', distance: '4 × (3 × 100m)', stroke: 'Freestyle', details: ['85% / 90% / 100% threshold pace', 'Rest = training time per set'] },
+    { phase: 'technique', label: 'TECHNIQUE', distance: '4 × 50m + 4 × 50m', stroke: 'Pull buoy + flutter kick' },
+  ],
+  // Wednesday
+  [
+    { phase: 'main-set', label: 'MAIN SET', distance: '6 × 200m', stroke: 'Freestyle', details: ['Descending pace', '1 min rest between sets'] },
+    { phase: 'technique', label: 'TECHNIQUE', distance: '4 × 50m', stroke: 'Flutter kick + flip turns + dive starts' },
+  ],
+  // Thursday
+  [
+    { phase: 'main-set', label: 'MAIN SET', distance: '400m + 300m + 400m + 300m', stroke: 'Freestyle + breaststroke/backstroke', details: ['Steady pace'] },
+  ],
+  // Friday
+  [
+    { phase: 'main-set', label: 'MAIN SET', stroke: 'Freestyle', details: ['1 × 400m · Threshold pace PB+10s · 2 min rest', '2 × 200m · Threshold pace PB+5s · 1 min rest', '4 × 100m · All-out sprint · 45 s rest'] },
+  ],
+  // Saturday
+  [
+    { phase: 'main-set', label: 'MAIN SET', distance: '3 × 400m', stroke: 'Freestyle', details: ['All-out', '3 min rest between sets', 'Record each set data'] },
+    { phase: 'technique', label: 'TECHNIQUE', distance: '4 × 50m', stroke: 'Technique/pace alternating' },
+  ],
+  // Sunday
+  [],
+];
+
+// 中文游泳每日分享摘要
+const swimShareZh: SwimShareBlock[][] = [
+  [ { phase: 'main-set', label: '主项', distance: '2000m', stroke: '自由泳', details: ['恒定配速'] } ],
+  [ { phase: 'main-set', label: '主项', distance: '4 × (3 × 100m)', stroke: '自由泳', details: ['每组分别阈值配速85%/90%/100%', '休息时间=每组训练时间'] }, { phase: 'technique', label: '技术补偿', distance: '4 × 50m + 4 × 50m', stroke: '夹板划手+浮板打腿' } ],
+  [ { phase: 'main-set', label: '主项', distance: '6 × 200m', stroke: '自由泳', details: ['配速递减', '组间休息1min'] }, { phase: 'technique', label: '技术补偿', distance: '4 × 50m', stroke: '浮板打腿+滚翻蹬边+跳发' } ],
+  [ { phase: 'main-set', label: '主项', distance: '400m + 300m + 400m + 300m', stroke: '自由泳+蛙泳/仰泳', details: ['恒定配速'] } ],
+  [ { phase: 'main-set', label: '主项', stroke: '自由泳', details: ['1 × 400m · 阈值配速PB+10s · 休息2min', '2 × 200m · 阈值配速PB+5s · 组间休息1min', '4 × 100m · 全力冲 · 组间休息45s'] } ],
+  [ { phase: 'main-set', label: '主项', distance: '3 × 400m', stroke: '自由泳', details: ['全力游', '组间休息3min', '记录每组数据'] }, { phase: 'technique', label: '技术补偿', distance: '4 × 50m', stroke: '技术/节奏交替' } ],
+  [],
+];
 
 // 训练目的选项
 const trainingGoals = [
@@ -16,9 +71,9 @@ const trainingGoals = [
 
 // 训练模式选项
 const trainingModes = [
-  { id: 'water', icon: '🏊‍♂️' },
-  { id: 'dryland', icon: '💪' },
-  { id: 'both', icon: '🎯' },
+  { id: 'water', icon: 'water' as IconName },
+  { id: 'dryland', icon: 'strength' as IconName },
+  { id: 'both', icon: 'target' as IconName },
 ];
 
 // 英文版自由泳训练计划模板
@@ -485,6 +540,182 @@ const drylandExercisesZh = {
   },
 };
 
+const posterTheme = {
+  canvasWidth: 1024,
+  canvasHeight: 1536,
+  exportScale: 2, // 2048×3072 导出
+
+  ink: '#071a33',
+  glass: 'rgba(8, 43, 69, 0.62)',
+  line: 'rgba(206, 245, 255, 0.72)',
+  aqua: '#70e8e8',
+  panelRadius: '22px',
+  cardRadius: '15px',
+  panelShadow: '0 14px 40px rgba(2, 12, 28, 0.22)',
+
+  // 固定 MON–SUN 配色（不再按 index 循环）
+  dayAccents: {
+    mon: '#5de8e2',   // aqua/turquoise
+    tue: '#ff9298',   // coral/pink
+    wed: '#91c8ff',   // light blue
+    thu: '#ffd06d',   // warm gold
+    fri: '#5de8e2',   // aqua/turquoise
+    sat: '#ce9cff',   // lavender/purple
+    sun: '#a0b8d0',   // soft cool
+  },
+} as const;
+
+// ─── 星期→配色映射 ────────────────────────────────
+const dayKeyMap: Record<string, keyof typeof posterTheme.dayAccents> = {
+  monday: 'mon', tuesday: 'tue', wednesday: 'wed', thursday: 'thu',
+  friday: 'fri', saturday: 'sat', sunday: 'sun',
+  '周一': 'mon', '周二': 'tue', '周三': 'wed', '周四': 'thu',
+  '周五': 'fri', '周六': 'sat', '周日': 'sun',
+};
+
+function accentForDay(day: string): string {
+  const key = dayKeyMap[day.toLowerCase()];
+  return posterTheme.dayAccents[key ?? 'mon'];
+}
+
+// ─── 核心动作摘录（每天最多 3 项） ──────────────────
+interface ShareHighlight {
+  name: string;
+  detail: string;
+}
+
+function shareHighlights(day: GeneratedPlan, lang: 'en' | 'zh'): ShareHighlight[] {
+  if (day.restDay) return [];
+
+  const excludePats = lang === 'en'
+    ? ['warm-up', 'cool-down', 'warm up', 'cool down', 'technical compensation']
+    : ['热身', '放松', '技术补偿'];
+  const isExcluded = (name: string) =>
+    excludePats.some(pat => name.toLowerCase().includes(pat));
+
+  // 优先陆上训练
+  if (day.drylandTraining) {
+    const main = day.drylandTraining.exercises.filter(ex => !isExcluded(ex.name));
+    const drylandItems = main.map(ex => ({
+      name: ex.name,
+      detail: compactDetail(ex.sets, ex.duration),
+    }));
+    if (drylandItems.length >= 3) return drylandItems.slice(0, 3);
+    // 陆上不足 3 个，用水上非热身补位
+    const waterCore = (day.waterTraining ?? [])
+      .filter(w => !isExcluded(w.name))
+      .map(w => ({ name: w.name, detail: w.content }));
+    return [...drylandItems, ...waterCore].slice(0, 3);
+  }
+
+  // 纯水上：排除热身/放松，取前 3
+  if (day.waterTraining && day.waterTraining.length > 0) {
+    return day.waterTraining
+      .filter(w => !isExcluded(w.name))
+      .slice(0, 3)
+      .map(w => ({ name: w.name, detail: w.content }));
+  }
+
+  return [];
+}
+
+// 紧凑训练量格式：'4 sets' + '10 reps per set' → '4 × 10 reps'
+function compactDetail(sets: string, duration: string): string {
+  const numFrom = (s: string) => s.match(/\d+/)?.[0] ?? '';
+  const unitFrom = (s: string) => {
+    const low = s.toLowerCase();
+    if (low.includes('rep')) return 'reps';
+    if (low.includes('min')) return 'min';
+    if (low.includes('sec') || low.includes('s per')) return 's';
+    return '';
+  };
+  const sNum = numFrom(sets);
+  const dNum = numFrom(duration);
+  const dUnit = unitFrom(duration);
+  if (sNum && dNum && dUnit) return `${sNum} × ${dNum} ${dUnit}`;
+  // 无法紧凑化时回退
+  if (sNum && duration) return `${sNum} × ${duration}`;
+  return `${sets} · ${duration}`;
+}
+
+// ─── 密度分级 ──────────────────────────────────────
+type Density = 'generous' | 'standard' | 'compact';
+
+function getDensity(dayCount: number): Density {
+  if (dayCount <= 2) return 'generous';
+  if (dayCount <= 4) return 'standard';
+  return 'compact';
+}
+
+// ─── 网格布局 ──────────────────────────────────────
+interface GridConfig {
+  columns: number;
+  lastCardCentered: boolean;  // 奇数天最后一张居中，等宽不跨列
+  gap: string;
+}
+
+function getGridLayout(dayCount: number, density: Density): GridConfig {
+  const lastCardCentered = dayCount >= 3 && dayCount % 2 === 1;
+  const columns = 2; // 始终 2 列网格，1 天居中卡片宽度 ≈ 单列宽
+  const gapMap: Record<Density, string> = {
+    generous: '16px 16px',
+    standard: '12px 12px',
+    compact: '8px 8px',
+  };
+  return { columns, lastCardCentered, gap: gapMap[density] };
+}
+
+// ─── 间距/字号缩放表（适配 1024×1536 画布） ────────
+const spacingScales: Record<Density, {
+  panelPadding: string;
+  cardPadding: string;
+  cardMinHeight: string;
+  cardTitleFontSize: string;
+  cardDetailFontSize: string;
+  cardDetailLineHeight: number;
+  accentBarWidth: string;
+  panelHeaderTitleSize: string;
+  panelHeaderSubtitleSize: string;
+  footerFontSize: string;
+}> = {
+  generous: {
+    panelPadding: '24px 28px 20px',
+    cardPadding: '16px 20px 16px 24px',
+    cardMinHeight: '155px',
+    cardTitleFontSize: '18px',
+    cardDetailFontSize: '15px',
+    cardDetailLineHeight: 1.45,
+    accentBarWidth: '6px',
+    panelHeaderTitleSize: '30px',
+    panelHeaderSubtitleSize: '13px',
+    footerFontSize: '13px',
+  },
+  standard: {
+    panelPadding: '20px 26px 16px',
+    cardPadding: '13px 17px 13px 22px',
+    cardMinHeight: '128px',
+    cardTitleFontSize: '16px',
+    cardDetailFontSize: '14px',
+    cardDetailLineHeight: 1.4,
+    accentBarWidth: '5px',
+    panelHeaderTitleSize: '27px',
+    panelHeaderSubtitleSize: '12px',
+    footerFontSize: '12px',
+  },
+  compact: {
+    panelPadding: '16px 22px 14px',
+    cardPadding: '10px 14px 10px 18px',
+    cardMinHeight: '105px',
+    cardTitleFontSize: '15px',
+    cardDetailFontSize: '13px',
+    cardDetailLineHeight: 1.35,
+    accentBarWidth: '4px',
+    panelHeaderTitleSize: '24px',
+    panelHeaderSubtitleSize: '11px',
+    footerFontSize: '11px',
+  },
+};
+
 interface GeneratedPlan {
   day: string;
   theme: string;
@@ -503,9 +734,11 @@ interface TrainingPlanGeneratorProps {
 export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanGeneratorProps) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    trainingDays: 6,
+    trainingDays: 3,
+    experience: 'beginner',
+    sessionMinutes: 45,
     goal: 'comprehensive',
-    trainingMode: 'dryland',
+    trainingMode: 'both',
   });
   const [generatedPlan, setGeneratedPlan] = useState<GeneratedPlan[] | null>(null);
   const [recommendedCourse, setRecommendedCourse] = useState<any>(null);
@@ -513,100 +746,53 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
   const shareCardRef = useRef<HTMLDivElement>(null);
   const [isGeneratingShare, setIsGeneratingShare] = useState(false);
 
-  // 生成分享图片
+  // 生成分享图片（4:5 海报 800×1000，导出 1600×2000）
   const generateShareImage = async () => {
-    if (!shareCardRef.current || !generatedPlan) {
-      console.log('Share card ref or generated plan is missing');
-      return;
-    }
+    if (!shareCardRef.current || !generatedPlan) return;
 
     setIsGeneratingShare(true);
-    console.log('Starting to generate share image...');
 
     try {
-      // 根据训练天数获取二维码尺寸
-      const getQRCodeSize = (days: number) => {
-        if (days <= 2) return 70;
-        if (days <= 4) return 65;
-        return 60;
-      };
+      // 等待背景图和海报 DOM 渲染完成
+      await new Promise(resolve => setTimeout(resolve, 300));
 
-      const qrCodeSize = getQRCodeSize(formData.trainingDays);
-
-      // 生成二维码
-      const qrCanvas = document.getElementById('qrcode-canvas') as HTMLCanvasElement;
-      if (qrCanvas) {
-        console.log('Generating QR code with size:', qrCodeSize);
-        try {
-          await QRCode.toCanvas(qrCanvas, 'https://drylandswimlab.com', {
-            width: qrCodeSize,
-            margin: 1,
-            color: {
-              dark: '#000000',
-              light: '#ffffff'
-            }
-          });
-          console.log('QR code generated successfully');
-        } catch (error) {
-          console.error('Error generating QR code:', error);
-        }
-      }
-
-      // 给更多时间让DOM完全渲染和二维码生成
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // 获取实际的卡片元素
-      const cardElement = shareCardRef.current.querySelector('div[style*="400px"]') as HTMLElement;
+      const cardElement = shareCardRef.current.querySelector(
+        '[data-training-share-poster]'
+      ) as HTMLElement;
       if (!cardElement) {
-        console.error('Card element not found');
         setIsGeneratingShare(false);
         alert(language === 'en' ? 'Card element not found' : '未找到卡片元素');
         return;
       }
 
-      console.log('Card element found, dimensions:', cardElement.offsetWidth, cardElement.offsetHeight);
-
-      // 强制重绘
-      cardElement.offsetHeight; // 触发重排
-
-      // 获取实际高度，限制最大高度为4000px
-      const actualHeight = cardElement.offsetHeight;
-      const maxHeight = 4000;
-      const finalHeight = Math.min(actualHeight, maxHeight);
-
-      console.log('Card dimensions:', cardElement.offsetWidth, actualHeight);
-      console.log('Final dimensions for canvas:', 400, finalHeight);
+      // 强制重排
+      cardElement.offsetHeight;
 
       const htmlCanvas = await html2canvas(cardElement, {
-        scale: 2, // 提高清晰度
-        backgroundColor: null, // 不使用默认背景色，使用图片背景
-        logging: true, // 启用日志用于调试
+        scale: posterTheme.exportScale,
+        backgroundColor: null,
+        logging: false,
         useCORS: true,
         allowTaint: true,
-        width: 400,
-        height: finalHeight, // 使用实际高度，但限制最大4000px
-        windowWidth: 400,
-        windowHeight: finalHeight, // 窗口高度与实际高度一致
-        foreignObjectRendering: false, // 禁用可能引起问题的功能
-        imageTimeout: 10000, // 增加图片加载超时时间
-        proxy: undefined, // 不使用代理
+        width: posterTheme.canvasWidth,
+        height: posterTheme.canvasHeight,
+        windowWidth: posterTheme.canvasWidth,
+        windowHeight: posterTheme.canvasHeight,
+        foreignObjectRendering: false,
+        imageTimeout: 10000,
         scrollX: 0,
         scrollY: 0,
         onclone: (clonedDoc) => {
-          // 确保克隆文档中的样式正确应用
-          const clonedCard = clonedDoc.querySelector('div[style*="400px"]') as HTMLElement;
+          const clonedCard = clonedDoc.querySelector(
+            '[data-training-share-poster]'
+          ) as HTMLElement;
           if (clonedCard) {
-            clonedCard.style.overflow = 'visible';
+            clonedCard.style.overflow = 'hidden';
           }
-        }
+        },
       });
 
-      console.log('Canvas generated successfully, dimensions:', htmlCanvas.width, htmlCanvas.height);
-
-      // 转换为图片并下载
       const dataUrl = htmlCanvas.toDataURL('image/png', 0.95);
-      console.log('Data URL length:', dataUrl.length);
-
       const link = document.createElement('a');
       link.href = dataUrl;
       link.download = `freestyle-training-plan-${formData.trainingDays}days.png`;
@@ -614,14 +800,15 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
       link.click();
       document.body.removeChild(link);
 
-      console.log('Download completed');
       setIsGeneratingShare(false);
-
     } catch (error) {
       console.error('Error generating share image:', error);
       setIsGeneratingShare(false);
-      // 显示错误提示给用户
-      alert(language === 'en' ? 'Failed to generate share image. Please try again.' : '生成分享图片失败，请重试。');
+      alert(
+        language === 'en'
+          ? 'Failed to generate share image. Please try again.'
+          : '生成分享图片失败，请重试。'
+      );
     }
   };
 
@@ -629,34 +816,74 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
     // 根据语言选择训练计划模板
     const freestylePlans = language === 'en' ? freestylePlansEn : freestylePlansZh;
     const drylandExercises = language === 'en' ? drylandExercisesEn : drylandExercisesZh;
+    const activeTemplates = freestylePlans.filter((day) => !day.restDay);
+    const scheduleByFrequency: Record<number, number[]> = {
+      1: [2],
+      2: [1, 4],
+      3: [0, 2, 4],
+      4: [0, 1, 3, 5],
+      5: [0, 1, 2, 4, 5],
+      6: [0, 1, 2, 3, 4, 5],
+    };
+    const selectedWeekdays = new Set(scheduleByFrequency[formData.trainingDays] ?? scheduleByFrequency[3]);
+    const timeFactor = formData.sessionMinutes === 30 ? 0.7 : formData.sessionMinutes === 60 ? 1.25 : 1;
+    const experienceVolume = formData.experience === 'beginner' ? 0.85 : formData.experience === 'intermediate' ? 1 : 1.1;
+    const waterVolumeFactor = timeFactor * experienceVolume;
+    const setFactor = formData.experience === 'beginner' ? 0.6 : formData.experience === 'intermediate' ? 0.8 : 1;
+    const maxExercises = formData.sessionMinutes === 30 ? 3 : 4;
+    const scaleDistance = (value: string) => value.replace(/(\d+)m(?![a-z])/gi, (_match, rawDistance: string) => {
+      const distance = Number(rawDistance);
+      return `${Math.max(50, Math.round((distance * waterVolumeFactor) / 50) * 50)}m`;
+    });
+    const scaleSetCount = (value: string) => value.replace(/(^|[^\d])(\d+)(\s*sets|\s*组)/i, (_match, prefix: string, rawCount: string, unit: string) => {
+      const count = Math.max(1, Math.round(Number(rawCount) * setFactor));
+      return `${prefix}${count}${unit}`;
+    });
 
-    const selectedPlans = freestylePlans.slice(0, formData.trainingDays);
-
-    const plan: GeneratedPlan[] = selectedPlans.map((dayPlan, index) => {
-      if (dayPlan.restDay) {
+    let trainingSlot = 0;
+    const plan: GeneratedPlan[] = freestylePlans.map((calendarDay, weekdayIndex) => {
+      if (!selectedWeekdays.has(weekdayIndex) || calendarDay.restDay) {
         return {
-          ...dayPlan,
+          day: calendarDay.day,
+          theme: language === 'en' ? 'Recovery and mobility' : '恢复与灵活性练习',
+          totalDistance: '',
+          intensity: '',
+          waterTraining: [],
           restDay: true,
           trainingMode: formData.trainingMode,
         };
       }
 
-      let drylandTraining = undefined;
+      const templateIndex = formData.trainingDays === 1
+        ? Math.floor(activeTemplates.length / 2)
+        : Math.round((trainingSlot * (activeTemplates.length - 1)) / (formData.trainingDays - 1));
+      const template = activeTemplates[templateIndex];
+      trainingSlot += 1;
+
+      let drylandTraining: GeneratedPlan['drylandTraining'];
       if (formData.trainingMode === 'dryland' || formData.trainingMode === 'both') {
         const exerciseSets = drylandExercises[formData.goal as keyof typeof drylandExercises].sets;
-        drylandTraining = exerciseSets[index % exerciseSets.length];
+        const exerciseSet = exerciseSets[(trainingSlot - 1) % exerciseSets.length];
+        drylandTraining = {
+          ...exerciseSet,
+          exercises: exerciseSet.exercises.slice(0, maxExercises).map((exercise) => ({
+            ...exercise,
+            sets: scaleSetCount(exercise.sets),
+          })),
+        };
       }
 
+      const includeWater = formData.trainingMode === 'water' || formData.trainingMode === 'both';
       return {
-        day: dayPlan.day,
+        day: calendarDay.day,
         theme: formData.trainingMode === 'dryland'
           ? (language === 'en' ? 'Dryland Training' : '陆上训练')
-          : dayPlan.theme,
-        totalDistance: formData.trainingMode === 'dryland'
-          ? ''
-          : dayPlan.totalDistance,
-        intensity: dayPlan.intensity,
-        waterTraining: formData.trainingMode === 'water' || formData.trainingMode === 'both' ? dayPlan.waterTraining : [],
+          : template.theme,
+        totalDistance: formData.trainingMode === 'dryland' ? '' : scaleDistance(template.totalDistance ?? ''),
+        intensity: template.intensity ?? '',
+        waterTraining: includeWater
+          ? (template.waterTraining ?? []).map((item) => ({ ...item, content: scaleDistance(item.content) }))
+          : [],
         drylandTraining,
         restDay: false,
         trainingMode: formData.trainingMode,
@@ -754,7 +981,7 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
               <input
                 type="range"
                 min="1"
-                max="7"
+                max="6"
                 value={formData.trainingDays}
                 onChange={(e) => setFormData({ ...formData, trainingDays: Number(e.target.value) })}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
@@ -782,12 +1009,35 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
                 </div>
                 <div className="text-center flex-1">
                   <div>{language === 'en' ? '6 days' : '6天'}</div>
-                  <div className="text-[10px] text-gray-400">{language === 'en' ? 'Professional' : '专业'}</div>
+                  <div className="text-[10px] text-gray-400">{language === 'en' ? 'Advanced' : '进阶'}</div>
                 </div>
-                <div className="text-center flex-1">
-                  <div>{language === 'en' ? '7 days' : '7天'}</div>
-                  <div className="text-[10px] text-gray-400">{language === 'en' ? 'Extreme' : '极限'}</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+              <div>
+                <h2 className="text-xl font-bold mb-3 text-gray-900">{t('calc.experience.title')}</h2>
+                <div className="grid grid-cols-1 gap-2">
+                  {(['beginner', 'intermediate', 'advanced'] as const).map((level) => (
+                    <button key={level} type="button" onClick={() => setFormData({ ...formData, experience: level })}
+                      className={`rounded-xl border p-3 text-left transition ${formData.experience === level ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}>
+                      <span className="block font-semibold text-gray-900">{t(`calc.experience.${level}.name`)}</span>
+                      <span className="mt-1 block text-xs leading-5 text-gray-600">{t(`calc.experience.${level}.description`)}</span>
+                    </button>
+                  ))}
                 </div>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold mb-3 text-gray-900">{t('calc.sessionTime.title')}</h2>
+                <div className="grid grid-cols-3 gap-2">
+                  {[30, 45, 60].map((minutes) => (
+                    <button key={minutes} type="button" onClick={() => setFormData({ ...formData, sessionMinutes: minutes })}
+                      className={`rounded-xl border p-3 font-semibold transition ${formData.sessionMinutes === minutes ? 'border-blue-500 bg-blue-50 text-blue-700 ring-1 ring-blue-200' : 'border-gray-200 text-gray-700 hover:border-blue-300'}`}>
+                      {t('calc.sessionTime.minutes', { minutes })}
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-3 text-sm leading-6 text-gray-500">{t('calc.sessionTime.note')}</p>
               </div>
             </div>
 
@@ -803,7 +1053,7 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
                       : 'border-gray-200 hover:border-blue-300'
                   }`}
                 >
-                  <div className="text-4xl mb-2">{mode.icon}</div>
+                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-700"><Icon name={mode.icon} className="h-6 w-6" /></div>
                   <h3 className="font-semibold text-gray-900 mb-1">{getModeText(mode.id, 'name')}</h3>
                   <p className="text-xs text-gray-600">{getModeText(mode.id, 'description')}</p>
                 </button>
@@ -841,12 +1091,20 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
           <div>
             <h2 className="text-2xl font-bold mb-6 text-gray-900">{t('calc.generated.title')}</h2>
             <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-6 mb-6">
-              <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                 <div>
                   <span className="text-gray-600">{t('calc.generated.frequency')}</span>
                   <p className="font-bold text-gray-900">
                     {t('calc.generated.days', { days: formData.trainingDays })}
                   </p>
+                </div>
+                <div>
+                  <span className="text-gray-600">{t('calc.generated.experience')}</span>
+                  <p className="font-bold text-gray-900">{t(`calc.experience.${formData.experience}.name`)}</p>
+                </div>
+                <div>
+                  <span className="text-gray-600">{t('calc.generated.sessionTime')}</span>
+                  <p className="font-bold text-gray-900">{t('calc.sessionTime.minutes', { minutes: formData.sessionMinutes })}</p>
                 </div>
                 <div>
                   <span className="text-gray-600">{t('calc.generated.mode')}</span>
@@ -898,22 +1156,26 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
                       <>
                         <div className="flex gap-2 mb-3">
                           {day.trainingMode === 'water' && (
-                            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
-                              🏊‍♂️ {language === 'en' ? 'Water Training' : '水下训练'}
+                            <span className="inline-flex items-center gap-1.5 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
+                              <Icon name="water" className="h-3.5 w-3.5" />
+                              {language === 'en' ? 'Water Training' : '水下训练'}
                             </span>
                           )}
                           {day.trainingMode === 'dryland' && (
-                            <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
-                              💪 {language === 'en' ? 'Dryland Training' : '陆上训练'}
+                            <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                              <Icon name="strength" className="h-3.5 w-3.5" />
+                              {language === 'en' ? 'Dryland Training' : '陆上训练'}
                             </span>
                           )}
                           {day.trainingMode === 'both' && (
                             <>
-                              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
-                                🏊‍♂️ {language === 'en' ? 'Water Training' : '水下训练'}
+                              <span className="inline-flex items-center gap-1.5 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
+                                <Icon name="water" className="h-3.5 w-3.5" />
+                                {language === 'en' ? 'Water Training' : '水下训练'}
                               </span>
-                              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
-                                💪 {language === 'en' ? 'Dryland Training' : '陆上训练'}
+                              <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                                <Icon name="strength" className="h-3.5 w-3.5" />
+                                {language === 'en' ? 'Dryland Training' : '陆上训练'}
                               </span>
                             </>
                           )}
@@ -1077,338 +1339,292 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
         )}
       </div>
 
-      {/* 隐藏的分享卡片 - 用于生成图片 */}
+      {/* 分享海报：2:3 画布 1024×1536，下半部训练面板，数据与样式分离 */}
       {generatedPlan && (() => {
-        // 根据训练天数自适应调整字号和间距
-        const getStyles = (days: number) => {
-          if (days <= 2) {
-            return {
-              brandFontSize: '24px',        // 放大主标题
-              brandFontWeight: '800',       // 增加字重
-              subFontSize: '12px',          // 副标题字号
-              titleMargin: '4px',           // 缩小标题间距
-              dayFontSize: '14px',          // 日期字号
-              labelFontSize: '10px',        // 强度标签字号
-              contentFontSize: '12px',      // 内容字号
-              detailFontSize: '11px',       // 详细内容字号
-              cardPadding: '12px',         // 增加卡片内边距
-              cardGap: '8px',              // 增加卡片间距
-              sectionGap: '6px',           // 模块标题与列表间距
-              lineHeight: '1.5',           // 行高优化
-              minHeight: '80px',           // 增加最小高度
-              paramFontSize: '10px',      // 底部参数字号增大
-              paramColor: 'rgba(255, 255, 255, 0.9)', // 柔和白色
-              qrcodeSize: '60px'           // 二维码尺寸
-            };
-          } else if (days <= 4) {
-            return {
-              brandFontSize: '22px',        // 放大主标题
-              brandFontWeight: '800',       // 增加字重
-              subFontSize: '11px',          // 副标题字号
-              titleMargin: '3px',           // 缩小标题间距
-              dayFontSize: '13px',          // 日期字号
-              labelFontSize: '9px',         // 强度标签字号
-              contentFontSize: '11px',      // 内容字号
-              detailFontSize: '10px',       // 详细内容字号
-              cardPadding: '10px',         // 增加卡片内边距
-              cardGap: '7px',              // 增加卡片间距
-              sectionGap: '5px',           // 模块标题与列表间距
-              lineHeight: '1.5',           // 行高优化
-              minHeight: '70px',           // 增加最小高度
-              paramFontSize: '9px',       // 底部参数字号增大
-              paramColor: 'rgba(255, 255, 255, 0.9)', // 柔和白色
-              qrcodeSize: '55px'           // 二维码尺寸
-            };
-          } else {
-            return {
-              brandFontSize: '20px',        // 放大主标题
-              brandFontWeight: '800',       // 增加字重
-              subFontSize: '10px',          // 副标题字号
-              titleMargin: '2px',           // 缩小标题间距
-              dayFontSize: '12px',          // 日期字号
-              labelFontSize: '9px',         // 强度标签字号
-              contentFontSize: '10px',      // 内容字号
-              detailFontSize: '9px',        // 详细内容字号
-              cardPadding: '10px',         // 增加卡片内边距
-              cardGap: '6px',              // 增加卡片间距
-              sectionGap: '5px',           // 模块标题与列表间距
-              lineHeight: '1.5',           // 行高优化
-              minHeight: '65px',           // 增加最小高度
-              paramFontSize: '9px',       // 底部参数字号增大
-              paramColor: 'rgba(255, 255, 255, 0.9)', // 柔和白色
-              qrcodeSize: '50px'           // 二维码尺寸
-            };
-          }
+        const dayCount = generatedPlan.length;
+        const density = getDensity(dayCount);
+        const grid = getGridLayout(dayCount, density);
+        const sp = spacingScales[density];
+
+        // 中英文短标签
+        const shortDay = (day: string) => {
+          if (/[一-鿿]/.test(day)) return day;
+          return day.length > 3 ? day.slice(0, 3).toUpperCase() : day.toUpperCase();
         };
 
-        const styles = getStyles(formData.trainingDays);
+        // 面板标题（双语）
+        const weekTitle = language === 'en'
+          ? `YOUR WEEK / ${formData.trainingDays} SESSIONS`
+          : `训练周 / ${formData.trainingDays} 次训练`;
+
+        // 副标题按训练模式
+        const isSwimMode = formData.trainingMode === 'water' || formData.trainingMode === 'both';
+        const subtitle = language === 'en'
+          ? (isSwimMode ? 'FREESTYLE · SWIM TRAINING' : 'FREESTYLE · DRYLAND · COMPREHENSIVE IMPROVEMENT')
+          : (isSwimMode ? '自由泳 · 水下训练' : '自由泳 · 陆上 · 综合提升');
+
+        // 获取游泳摘要数据
+        const swimShareData = language === 'en' ? swimShareEn : swimShareZh;
+
+        // 休息日判断
+        const hasRestDay = generatedPlan.some(d => d.restDay);
+        const restLabel = hasRestDay
+          ? (language === 'en' ? 'SUN · RECOVER & RESET' : '周日 · 恢复与重置')
+          : (language === 'en' ? 'RECOVERY COUNTS' : '恢复同样重要');
+        const footerLabel = language === 'en'
+          ? 'Save this week · Share your swim'
+          : '保存这周 · 分享你的游泳';
+
+        // 奇数天或 1 天：拆分前后两组
+        const isOddLast = grid.lastCardCentered;
+        const isSingleDay = dayCount === 1;
+        const frontDays = isOddLast ? generatedPlan.slice(0, -1) : generatedPlan;
+        const lastDay = (isOddLast || isSingleDay) ? generatedPlan[generatedPlan.length - 1] : null;
+        // 1 天时 frontDays 为空（全走居中卡片），奇数天时前面满 2 列
+        const effectiveFrontDays = isSingleDay ? [] : frontDays;
+
+        // 渲染单张卡片
+        const renderCard = (day: GeneratedPlan, index: number, isCenteredLast = false) => {
+          const accent = accentForDay(day.day);
+          const highlights = shareHighlights(day, language);
+
+          return (
+            <article key={`${day.day}-${index}`} style={{
+              position: 'relative',
+              minHeight: day.restDay ? 'auto' : sp.cardMinHeight,
+              padding: sp.cardPadding,
+              overflow: 'hidden', boxSizing: 'border-box',
+              border: '1px solid rgba(211,242,255,0.40)',
+              borderRadius: posterTheme.cardRadius,
+              background: `linear-gradient(160deg, rgba(10,38,68,0.75), rgba(8,30,55,0.82) 50%, rgba(6,26,48,0.88))`,
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
+              ...(isCenteredLast ? { maxWidth: isSingleDay ? '65%' : '48%', margin: '0 auto' } : {}),
+            }}>
+              {/* 左 accent 色条 */}
+              <span style={{
+                position: 'absolute', top: '8px', bottom: '8px', left: 0,
+                width: sp.accentBarWidth, borderRadius: '0 6px 6px 0',
+                background: accent,
+              }} />
+
+              {/* 卡片标题行 */}
+              <div style={{
+                position: 'relative',
+                display: 'flex', alignItems: 'center', gap: '10px',
+                marginBottom: '8px',
+              }}>
+                <span style={{
+                  display: 'inline-flex', justifyContent: 'center', alignItems: 'center',
+                  minWidth: '68px', height: '30px', padding: '0 10px',
+                  boxSizing: 'border-box',
+                  borderRadius: '16px 16px 16px 4px',
+                  color: '#0e2a40', background: accent,
+                  fontSize: sp.cardTitleFontSize, lineHeight: 1,
+                  fontWeight: 700, letterSpacing: '0.5px',
+                }}>
+                  {shortDay(day.day)}
+                </span>
+                {!day.restDay && (
+                  <span style={{
+                    color: 'rgba(190,220,240,0.80)',
+                    fontSize: density === 'compact' ? '10px' : '11px',
+                    lineHeight: 1.2, fontWeight: 500,
+                    letterSpacing: '0.3px', textTransform: 'uppercase',
+                  }}>
+                    {day.drylandTraining?.category || day.theme} · {getIntensityLabel(day.intensity)}
+                  </span>
+                )}
+              </div>
+
+              {/* 训练内容：游泳模式按阶段纵向排版，陆上模式按动作列表 */}
+              {day.restDay ? (
+                <div style={{
+                  position: 'relative', margin: '12px 4px',
+                  color: 'rgba(255,255,255,0.90)', fontSize: sp.cardDetailFontSize,
+                }}>
+                  {day.theme}
+                </div>
+              ) : isSwimMode ? (
+                /* 游泳阶段块：MAIN SET 优先，然后 TECHNIQUE */
+                <div style={{ position: 'relative' }}>
+                  {(() => {
+                    // 从预定义摘要取当天数据，按 day index
+                    const dayIdx = generatedPlan.indexOf(day);
+                    const blocks = dayIdx >= 0 && dayIdx < swimShareData.length
+                      ? swimShareData[dayIdx] : [];
+                    if (blocks.length === 0) {
+                      // 回退：使用 shareHighlights
+                      return highlights.map((hl, hlIdx) => (
+                        <div key={hlIdx} style={{
+                          margin: '4px 0', fontSize: sp.cardDetailFontSize,
+                          lineHeight: sp.cardDetailLineHeight,
+                          color: 'rgba(250,253,255,0.90)',
+                        }}>{hl.name} · {hl.detail}</div>
+                      ));
+                    }
+                    return blocks.map((block, bIdx) => (
+                      <div key={bIdx} style={{
+                        marginBottom: bIdx < blocks.length - 1 ? '8px' : '0',
+                        paddingTop: bIdx > 0 ? '6px' : '0',
+                        borderTop: bIdx > 0 ? '1px solid rgba(180,220,255,0.12)' : 'none',
+                      }}>
+                        {/* 阶段标签 */}
+                        <div style={{
+                          fontSize: density === 'compact' ? '9px' : '10px',
+                          fontWeight: 700, letterSpacing: '1.2px',
+                          color: 'rgba(180,230,255,0.70)',
+                          textTransform: 'uppercase', marginBottom: '3px',
+                        }}>
+                          {block.label}
+                        </div>
+                        {/* 距离 + 泳姿 */}
+                        {block.distance && (
+                          <div style={{
+                            fontSize: sp.cardDetailFontSize,
+                            fontWeight: 700, lineHeight: 1.3,
+                            color: 'rgba(120,232,236,0.95)',
+                          }}>
+                            {block.distance}{block.stroke ? ` · ${block.stroke}` : ''}
+                          </div>
+                        )}
+                        {/* 仅泳姿（无距离时） */}
+                        {!block.distance && block.stroke && (
+                          <div style={{
+                            fontSize: sp.cardDetailFontSize,
+                            fontWeight: 700, lineHeight: 1.3,
+                            color: 'rgba(120,232,236,0.95)',
+                          }}>
+                            {block.stroke}
+                          </div>
+                        )}
+                        {/* 间歇/配速/休息细节 */}
+                        {block.details && block.details.map((line, lIdx) => (
+                          <div key={lIdx} style={{
+                            fontSize: density === 'compact' ? '11px' : '12px',
+                            lineHeight: 1.35,
+                            color: 'rgba(210,235,255,0.82)',
+                            marginTop: '2px',
+                          }}>
+                            {line}
+                          </div>
+                        ))}
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : (
+                /* 陆上动作列表：名称左对齐，训练量右对齐 */
+                <div style={{ position: 'relative' }}>
+                  {highlights.map((hl, hlIdx) => (
+                    <div key={hlIdx} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+                      gap: '10px', margin: '6px 0',
+                      fontSize: sp.cardDetailFontSize,
+                      lineHeight: sp.cardDetailLineHeight,
+                      color: 'rgba(250,253,255,0.94)',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', flex: '1 1 auto', minWidth: 0 }}>
+                        <span style={{
+                          width: '7px', height: '7px', minWidth: '7px',
+                          borderRadius: '50%', background: accent,
+                          display: 'inline-block', flexShrink: 0,
+                        }} />
+                        <span style={{ fontWeight: 600, overflow: 'visible' }}>{hl.name}</span>
+                      </div>
+                      <span style={{ opacity: 0.78, whiteSpace: 'nowrap', flexShrink: 0, textAlign: 'right' }}>{hl.detail}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </article>
+          );
+        };
 
         return (
-        <div ref={shareCardRef} className="fixed -top-[9999px] -left-[9999px]">
-          <div
-            style={{
-              width: '400px',
-              minHeight: '600px',
-              maxHeight: '4000px', // 限制最大高度为4000px
-              height: 'auto',
+          <div ref={shareCardRef} className="fixed -top-[9999px] -left-[9999px]" aria-hidden="true">
+            <div data-training-share-poster style={{
+              width: `${posterTheme.canvasWidth}px`,
+              height: `${posterTheme.canvasHeight}px`,
+              position: 'relative', overflow: 'hidden', boxSizing: 'border-box',
+              color: '#fff', fontFamily: 'Arial, Helvetica, sans-serif',
               backgroundImage: 'url(/background.png)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              color: '#ffffff',
-              display: 'flex',
-              flexDirection: 'column',
-              fontFamily: 'Arial, sans-serif',
-              position: 'relative',
-              overflow: 'auto' // 内容超出时显示滚动条
-            }}
-          >
-            {/* 品牌信息 */}
-            <div style={{ textAlign: 'center', padding: '16px 12px 8px 12px', zIndex: 1 }}>
-              <h2 style={{
-                fontSize: styles.brandFontSize,
-                fontWeight: styles.brandFontWeight,
-                margin: 0,
-                letterSpacing: '0.5px',
-                textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-                lineHeight: '1.2'
-              }}>
-                DRYLAND SWIM LAB
-              </h2>
-              <p style={{
-                fontSize: styles.subFontSize,
-                opacity: 0.95,
-                margin: `${styles.titleMargin} 0 0 0`,
-                textShadow: '0 1px 3px rgba(0,0,0,0.3)',
-                fontWeight: '500',
-                letterSpacing: '0.3px'
-              }}>
-                {language === 'en' ? 'Freestyle Training Plan' : '自由泳训练计划'}
-              </p>
-            </div>
+              backgroundSize: 'cover', backgroundPosition: 'center top', backgroundRepeat: 'no-repeat',
+            }}>
+              {/* 无 header — 品牌/标语/泳者已在 background.png 中 */}
 
-            {/* 训练计划内容 - 极简长图布局 */}
-            <div
-              style={{
-                padding: '0 16px', // 增加左右留白
-                zIndex: 1,
-                textAlign: 'left' // 左对齐更现代
-              }}
-            >
-              {/* 所有训练计划 */}
-              {generatedPlan.map((day, index) => (
-                <div key={index} style={{
-                  padding: `${styles.cardPadding}px 0`,
-                  borderBottom: index < generatedPlan.length - 1 ? '1px solid rgba(255, 255, 255, 0.15)' : 'none',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  textAlign: 'center',
-                  minHeight: styles.minHeight
-                }}>
-                  {/* 极简基准线标题栏 */}
+              {/* 训练信息面板：下半部玻璃质感 */}
+              <section style={{
+                position: 'absolute', top: '720px', left: '4%', width: '92%', zIndex: 2,
+                padding: sp.panelPadding, boxSizing: 'border-box',
+                borderRadius: posterTheme.panelRadius,
+                border: `1.5px solid ${posterTheme.line}`,
+                background: 'linear-gradient(135deg, rgba(12,48,76,0.78), rgba(5,28,52,0.84))',
+                boxShadow: posterTheme.panelShadow,
+              }}>
+                {/* 面板标题 */}
+                <div style={{ padding: '0 4px 14px', borderBottom: '1px solid rgba(219,246,255,0.22)' }}>
                   <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '10px',
-                    height: '24px'
+                    fontSize: sp.panelHeaderTitleSize, lineHeight: 1.15,
+                    fontWeight: 700, letterSpacing: '0.6px',
                   }}>
-                    {/* 左侧日期 - 纯白色大字加粗 */}
-                    <div style={{
-                      fontWeight: '700',
-                      fontSize: styles.dayFontSize,
-                      color: '#ffffff',
-                      textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-                      letterSpacing: '0.5px',
-                      minWidth: '50px',
-                      textAlign: 'left'
-                    }}>
-                      {day.day}
-                    </div>
-
-                    {/* 右侧强度 - 极简微型胶囊或纯文本 */}
-                    {!day.restDay && (
-                      <div style={{
-                        fontSize: styles.labelFontSize,
-                        fontWeight: '500',
-                        color: 'rgba(255, 255, 255, 0.85)',
-                        letterSpacing: '0.3px',
-                        textShadow: '0 1px 2px rgba(0,0,0,0.2)',
-                        padding: '0 8px',
-                        background: day.intensity.includes('Low')
-                          ? 'rgba(74, 222, 128, 0.1)'
-                          : day.intensity.includes('Medium')
-                          ? 'rgba(250, 204, 21, 0.1)'
-                          : 'rgba(239, 68, 68, 0.1)',
-                        borderRadius: '12px'
-                      }}>
-                        {getIntensityLabel(day.intensity)}
-                      </div>
-                    )}
+                    {weekTitle}
                   </div>
-
-                  {!day.restDay ? (
-                    <div style={{ flex: 1, fontSize: styles.contentFontSize, opacity: 0.95, lineHeight: styles.lineHeight }}>
-                      <p style={{ margin: '6px 0 3px 0', fontWeight: '700', letterSpacing: '0.3px', textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
-                        🎯 {day.theme}
-                      </p>
-                      <p style={{ margin: '3px 0 8px 0', opacity: 0.85, fontWeight: '500', letterSpacing: '0.2px' }}>
-                        📊 {day.totalDistance}
-                      </p>
-
-                      {/* 兼顾训练模式 - 并排显示水下和陆上训练 */}
-                      {day.trainingMode === 'both' && day.waterTraining.length > 0 && day.drylandTraining && (
-                        <div style={{ display: 'flex', gap: '12px', marginTop: styles.sectionGap }}>
-                          {/* 水下训练 */}
-                          <div style={{ flex: 1, fontSize: styles.detailFontSize, opacity: 0.8 }}>
-                            <div style={{ marginBottom: '6px', opacity: 0.6, fontWeight: '600', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-                              🏊‍♂️ {language === 'en' ? 'Water' : '水下'}
-                            </div>
-                            {day.waterTraining.map((water, wIndex) => (
-                              <div key={wIndex} style={{ marginBottom: '3px', lineHeight: '1.4', paddingLeft: '8px' }}>
-                                • {water.name}: {water.content}
-                              </div>
-                            ))}
-                          </div>
-                          {/* 陆上训练 */}
-                          <div style={{ flex: 1, fontSize: styles.detailFontSize, opacity: 0.8 }}>
-                            <div style={{ marginBottom: '6px', opacity: 0.6, fontWeight: '600', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-                              💪 {language === 'en' ? 'Dryland' : '陆上'}
-                            </div>
-                            {day.drylandTraining.exercises.slice(0, 3).map((exercise, exIndex) => (
-                              <div key={exIndex} style={{ marginBottom: '3px', lineHeight: '1.4', paddingLeft: '8px' }}>
-                                • {exercise.name} ({exercise.sets})
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* 单一水下训练 */}
-                      {day.trainingMode === 'water' && day.waterTraining.length > 0 && (
-                        <div style={{ marginTop: styles.sectionGap, fontSize: styles.detailFontSize, opacity: 0.8 }}>
-                          <div style={{ marginBottom: '6px', opacity: 0.6, fontWeight: '600', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-                            🏊‍♂️ {language === 'en' ? 'Water Training' : '水下训练'}
-                          </div>
-                          {day.waterTraining.map((water, wIndex) => (
-                            <div key={wIndex} style={{ paddingLeft: '8px', marginBottom: '3px', lineHeight: '1.4' }}>
-                              • {water.name}: {water.content}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* 单一陆上训练 */}
-                      {day.trainingMode === 'dryland' && day.drylandTraining && (
-                        <div style={{ marginTop: styles.sectionGap, fontSize: styles.detailFontSize, opacity: 0.8 }}>
-                          <div style={{ marginBottom: '6px', opacity: 0.6, fontWeight: '600', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-                            💪 {day.drylandTraining.name}
-                          </div>
-                          {day.drylandTraining.exercises.map((exercise, exIndex) => (
-                            <div key={exIndex} style={{ paddingLeft: '8px', marginBottom: '3px', lineHeight: '1.4' }}>
-                              • {exercise.name} ({exercise.sets})
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div style={{
-                      textAlign: 'center',
-                      fontSize: styles.contentFontSize,
-                      marginTop: '4px',
-                      opacity: 0.7,
-                      fontWeight: '500',
-                      letterSpacing: '0.3px'
-                    }}>
-                      🏠 {language === 'en' ? 'Rest Day' : '休息日'}
-                    </div>
-                  )}
+                  <div style={{
+                    marginTop: '8px', fontSize: sp.panelHeaderSubtitleSize,
+                    letterSpacing: '2px', color: 'rgba(211,244,250,0.88)',
+                  }}>
+                    {subtitle}
+                  </div>
                 </div>
-              ))}
 
-            </div>
-
-            {/* 参数信息 - 放在下方，优化样式 */}
-            <div style={{
-              padding: '12px 16px',
-              fontSize: styles.paramFontSize,
-              textAlign: 'center',
-              color: styles.paramColor,
-              zIndex: 1,
-              borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-              background: 'rgba(0, 0, 0, 0.15)',
-              backdropFilter: 'blur(8px)',
-              fontWeight: '500',
-              letterSpacing: '0.3px',
-              marginTop: 'auto'
-            }}>
-              {language === 'en'
-                ? `🏊 ${formData.trainingDays} days/week · ${getGoalText(formData.goal, 'name')} · ${getModeText(formData.trainingMode, 'name')} · Freestyle`
-                : `🏊 ${formData.trainingDays}天/周 · ${getGoalText(formData.goal, 'name')} · ${getModeText(formData.trainingMode, 'name')} · 自由泳`
-              }
-            </div>
-
-            {/* 底部区域 - 品牌名和二维码 */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '16px',
-              zIndex: 1,
-              background: 'rgba(0, 0, 0, 0.1)',
-              backdropFilter: 'blur(8px)'
-            }}>
-              {/* 品牌名 */}
-              <div style={{ flex: 1 }}>
+                {/* 日卡片网格 */}
                 <div style={{
-                  fontSize: '10px',
-                  opacity: 0.6,
-                  fontWeight: '500',
-                  letterSpacing: '0.5px',
-                  textTransform: 'uppercase'
+                  display: 'grid',
+                  gridTemplateColumns: grid.columns === 1 ? '1fr' : 'repeat(2, minmax(0, 1fr))',
+                  gap: grid.gap,
+                  marginTop: '12px',
                 }}>
-                  {language === 'en' ? 'PROFESSIONAL TRAINING' : '专业训练'}
+                  {effectiveFrontDays.map((day, index) => renderCard(day, index))}
                 </div>
-                <div style={{
-                  fontSize: '8px',
-                  opacity: 0.4,
-                  marginTop: '2px',
-                  letterSpacing: '0.3px'
-                }}>
-                  {language === 'en' ? 'CUSTOMIZE YOUR PLAN' : '定制你的专属计划'}
-                </div>
-              </div>
 
-              {/* 二维码 */}
-              <div style={{
-                textAlign: 'center',
-                marginLeft: '12px'
+                {/* 奇数天最后一张卡片：居中、等宽 */}
+                {lastDay && (
+                  <div style={{ marginTop: grid.gap.split(' ')[0], display: 'flex', justifyContent: 'center' }}>
+                    {renderCard(lastDay, generatedPlan.length - 1, true)}
+                  </div>
+                )}
+
+                {/* 面板底栏 */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '14px',
+                  minHeight: '38px', marginTop: '14px',
+                  padding: '5px 14px', boxSizing: 'border-box',
+                  border: '1px solid rgba(211,242,255,0.35)',
+                  borderRadius: '18px',
+                  background: 'rgba(30,80,115,0.40)',
+                  fontSize: sp.footerFontSize, letterSpacing: '0.2px',
+                }}>
+                  <span style={{ color: '#ffe5a6', fontSize: '18px' }}>☼</span>
+                  <span style={{ whiteSpace: 'nowrap' }}>{restLabel}</span>
+                  <span style={{ opacity: 0.45 }}>|</span>
+                  <span>{footerLabel}</span>
+                </div>
+              </section>
+
+              {/* 页脚 */}
+              <footer style={{
+                position: 'absolute', bottom: 0, width: '100%',
+                textAlign: 'center', padding: '10px 0 16px',
+                fontSize: '12px', letterSpacing: '1.7px',
+                color: 'rgba(255,255,255,0.82)',
+                textShadow: '0 2px 8px rgba(0,0,0,0.6)',
+                zIndex: 1,
               }}>
-                <canvas id="qrcode-canvas" style={{
-                  width: styles.qrcodeSize,
-                  height: styles.qrcodeSize,
-                  display: 'block',
-                  borderRadius: '4px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-                }} />
-                <div style={{
-                  fontSize: '7px',
-                  color: 'rgba(255, 255, 255, 0.7)',
-                  fontWeight: '500',
-                  marginTop: '4px',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
-                  lineHeight: '1.3',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.2px'
-                }}>
-                  {language === 'en' ? 'Scan to customize' : '扫码定制你的专属计划'}
-                </div>
-              </div>
+                DRYLANDSWIMLAB.COM
+              </footer>
             </div>
           </div>
-        </div>
-      );
+        );
       })()}
     </div>
   );

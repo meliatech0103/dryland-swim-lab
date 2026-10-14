@@ -7,9 +7,10 @@ export function useTranslation(language: Language) {
     header: {
       logo: 'Dryland Swim Lab',
       home: 'Home',
-      trainingTools: 'Free Custom Training Plan',
-      trainingPlans: 'Swimmers Share',
-      course: 'Dryland Specialized Training Courses',
+      trainingTools: 'Training Planner',
+      trainingPlans: 'Guides & Stories',
+      course: 'Dryland Course',
+      coaches: 'Coaches',
     },
 
     // Footer
@@ -20,11 +21,11 @@ export function useTranslation(language: Language) {
     // Home Page
     home: {
       hero: {
-        title: 'Freestyle Dryland Training',
-        subtitle: 'Platform for Swimmers',
-        description: 'Professional Freestyle Specialist Course · 1v1 Online Coaching',
-        tryFree: 'Try Free Tools',
-        viewCourse: 'View Course',
+        title: 'Dryland Training',
+        subtitle: 'for Freestyle Swimmers',
+        description: 'Coach-led strength and technique sessions for adult and amateur swimmers.',
+        tryFree: 'Build My Training Plan',
+        viewCourse: 'Explore the Course',
       },
       features: {
         title: 'Why Choose Us?',
@@ -81,6 +82,17 @@ export function useTranslation(language: Language) {
         label: 'Training days per week:',
         days: '{days} days',
       },
+      experience: {
+        title: 'Your swimming experience',
+        beginner: { name: 'New or returning', description: 'You are building a steady routine or returning after a break.' },
+        intermediate: { name: 'Regular swimmer', description: 'You train most weeks and know your comfortable pace.' },
+        advanced: { name: 'Experienced', description: 'You train consistently and are comfortable with harder sets.' },
+      },
+      sessionTime: {
+        title: 'Time available per session',
+        minutes: '{minutes} min',
+        note: 'The plan adjusts training volume to fit your time and experience.',
+      },
       mode: {
         title: 'Select Training Mode',
         water: {
@@ -115,7 +127,7 @@ export function useTranslation(language: Language) {
           description: 'Comprehensive enhancement of all swimming skills',
         },
       },
-      note: '🏊‍♂️ Freestyle Training Focus - This system is designed specifically for freestyle enthusiasts. You can choose to focus on water training, dryland training, or both when time permits. Dryland training content automatically rotates based on training days to avoid repetition.',
+      note: 'Plans are starting points for freestyle swimmers. Choose water training, dryland work, or both. Keep at least one recovery day and stop if you feel pain.',
       generated: {
         title: 'Your Freestyle Training Plan',
         frequency: 'Training frequency:',
@@ -126,9 +138,11 @@ export function useTranslation(language: Language) {
         content: 'Training content:',
         contentValue: 'Water swimming + Rotating dryland training',
         distance: 'Training total distance:',
-        water: '🏊‍♂️ Water swimming training:',
-        dryland: '💪 Dryland training:',
-        rest: '🏠 Complete rest day, let body fully recover',
+        water: 'Water training:',
+        dryland: 'Dryland training:',
+        rest: 'Recovery day',
+        experience: 'Experience level:',
+        sessionTime: 'Time per session:',
         recommend: {
           title: 'Recommended Freestyle Course',
           sessions: '{sessions} sessions × {duration} min',
@@ -140,7 +154,7 @@ export function useTranslation(language: Language) {
       features: {
         water: {
           title: 'Professional Water Training',
-          description: 'Based on professional 6-day training template, covering endurance, speed, and technique training',
+          description: 'A flexible weekly plan with training and recovery days built in',
         },
         dryland: {
           title: 'Complementary Dryland Training',
@@ -218,12 +232,12 @@ export function useTranslation(language: Language) {
         technical: 'Continuous stroke coordination with perfect body rotation and breathing rhythm',
         speed: 'Fastest swimming style with optimal energy expenditure per distance',
         dryland: 'Upper body strength, core stability, and stroke technique training',
-        difficulty: '⭐⭐⭐⭐ Requires better coordination and endurance - rewarding challenge',
+        difficulty: 'A rewarding challenge for swimmers with a steady training base',
         performance: 'Improved cardiovascular fitness, upper body strength, and overall athletic ability',
         recommended: '4-5 times per week, 20-30 minutes per session for optimal results',
       },
       training: {
-        title: '🏋️ Dryland Training',
+        title: 'Dryland Training',
         description: 'Our specialized freestyle dryland training focuses on:',
         core: '✓ Core strength development for body stability',
         upper: '✓ Upper body strength for powerful strokes',
@@ -231,7 +245,7 @@ export function useTranslation(language: Language) {
         stroke: '✓ Stroke technique simulation and refinement',
       },
       results: {
-        title: '🎯 Training Results',
+        title: 'Training Focus',
         description: 'After completing our freestyle training course, you will achieve:',
         efficiency: '✓ Improved stroke efficiency and speed',
         body: '✓ Better body positioning and rotation',
@@ -249,7 +263,7 @@ export function useTranslation(language: Language) {
     // Blog Page
     blog: {
       title: 'Freestyle Training Plans & Tips',
-      description: 'Professional freestyle dryland training plans, technique sharing, and student success stories',
+      description: 'Practical freestyle training plans, technique notes, and experiences from amateur swimmers',
       category: 'Training Plans',
       categoryTechnique: 'Technique',
       readMore: 'Read More →',
@@ -266,9 +280,10 @@ export function useTranslation(language: Language) {
     header: {
       logo: 'Dryland Swim Lab',
       home: '首页',
-      trainingTools: '免费定制训练计划',
-      trainingPlans: '泳者分享',
-      course: '陆上专项训练课程',
+      trainingTools: '训练计划',
+      trainingPlans: '技巧与泳友分享',
+      course: '陆上课程',
+      coaches: '教练团队',
     },
 
     // Footer
@@ -279,11 +294,11 @@ export function useTranslation(language: Language) {
     // Home Page
     home: {
       hero: {
-        title: '自由泳陆地训练',
-        subtitle: '业余游泳爱好者平台',
-        description: '专业自由泳专项课程 · 1v1在线指导',
-        tryFree: '试用免费工具',
-        viewCourse: '查看课程',
+        title: '自由泳陆上训练',
+        subtitle: '为业余泳者打造',
+        description: '由教练设计的力量与技术训练，帮助你更有准备地回到泳池。',
+        tryFree: '生成训练计划',
+        viewCourse: '了解课程',
       },
       features: {
         title: '为什么选择我们？',
@@ -340,6 +355,17 @@ export function useTranslation(language: Language) {
         label: '每周训练天数:',
         days: '{days}天',
       },
+      experience: {
+        title: '你的游泳经验',
+        beginner: { name: '初学或重新开始', description: '正在建立规律训练，或休息一段时间后回归。' },
+        intermediate: { name: '规律训练', description: '大多数周都会训练，也了解自己舒服的配速。' },
+        advanced: { name: '经验丰富', description: '训练稳定，能够适应更有挑战性的训练组。' },
+      },
+      sessionTime: {
+        title: '每次可训练时间',
+        minutes: '{minutes} 分钟',
+        note: '计划会根据你的时间和经验调整训练量。',
+      },
       mode: {
         title: '选择训练模式',
         water: {
@@ -374,7 +400,7 @@ export function useTranslation(language: Language) {
           description: '全面提升各项游泳技能',
         },
       },
-      note: '🏊‍♂️ 专注自由泳训练 - 本系统专门为自由泳爱好者设计。你可以选择专注于水下训练、陆上训练，或时间充裕时兼顾两者。陆上训练内容会根据训练天数自动轮换，避免重复训练。',
+      note: '计划是自由泳训练的起点。可选择水下训练、陆上训练或兼顾两者；每周至少安排一天恢复，出现疼痛时请停止训练。',
       generated: {
         title: '你的自由泳训练计划',
         frequency: '训练频率:',
@@ -385,9 +411,11 @@ export function useTranslation(language: Language) {
         content: '训练内容:',
         contentValue: '水下游泳 + 轮换陆上训练',
         distance: '训练总距离:',
-        water: '🏊‍♂️ 水下游泳训练:',
-        dryland: '💪 陆上训练:',
-        rest: '🏠 完全休息日，让身体充分恢复',
+        water: '水下训练:',
+        dryland: '陆上训练:',
+        rest: '恢复日',
+        experience: '训练经验:',
+        sessionTime: '每次训练时间:',
         recommend: {
           title: '推荐自由泳训练课程',
           sessions: '{sessions} 节课 × {duration} 分钟',
@@ -399,7 +427,7 @@ export function useTranslation(language: Language) {
       features: {
         water: {
           title: '专业水下训练',
-          description: '基于一周六练的专业训练模板，涵盖耐力、速度、技术训练',
+          description: '安排训练与恢复日的灵活周计划',
         },
         dryland: {
           title: '配套陆上训练',
@@ -477,12 +505,12 @@ export function useTranslation(language: Language) {
         technical: '连续划水配合完美的身体旋转和呼吸节奏',
         speed: '最快的游泳方式，单位距离能量消耗最优',
         dryland: '上肢力量、核心稳定性和划水技术训练',
-        difficulty: '⭐⭐⭐⭐ 需要更好的协调性和耐力 - 有回报的挑战',
+        difficulty: '适合已有稳定训练基础的泳者挑战',
         performance: '改善心肺功能、上肢力量和整体运动能力',
         recommended: '每周4-5次，每次20-30分钟以获得最佳效果',
       },
       training: {
-        title: '🏋️ 陆地训练',
+        title: '陆上训练',
         description: '我们专业的自由泳陆地训练专注于：',
         core: '✓ 核心力量发展，提升身体稳定性',
         upper: '✓ 上肢力量，增强划水力度',
@@ -490,7 +518,7 @@ export function useTranslation(language: Language) {
         stroke: '✓ 划水技术模拟和完善',
       },
       results: {
-        title: '🎯 训练效果',
+        title: '训练重点',
         description: '完成我们的自由泳训练课程后，你将实现：',
         efficiency: '✓ 提升划水效率和速度',
         body: '✓ 更好的身体定位和旋转',
@@ -508,7 +536,7 @@ export function useTranslation(language: Language) {
     // Blog Page
     blog: {
       title: '自由泳训练计划与技巧',
-      description: '专业自由泳陆地训练计划、技术分享和学员成功故事',
+      description: '实用的自由泳训练计划、技术笔记和业余泳者经验分享',
       category: '训练计划',
       categoryTechnique: '技术心得',
       readMore: '阅读更多 →',

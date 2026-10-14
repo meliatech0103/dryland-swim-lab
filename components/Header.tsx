@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/LanguageContext';
 
@@ -15,6 +16,7 @@ export default function Header() {
     { href: '/free/calc', labelKey: 'header.trainingTools' },
     { href: '/free/blog', labelKey: 'header.trainingPlans' },
     { href: '/paid', labelKey: 'header.course' },
+    { href: '/#coaches', labelKey: 'header.coaches' },
   ];
 
   const toggleMobileMenu = () => {
@@ -30,24 +32,25 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
-              <path d="M16 8C18.2091 8 20 6.20914 20 4C20 1.79086 18.2091 0 16 0C13.7909 0 12 1.79086 12 4C12 6.20914 13.7909 8 16 8Z" fill="white"/>
-              <path d="M8 16C8 16 12 12 16 12C20 12 24 16 24 16" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-              <path d="M6 22L10 18L14 22L18 18L22 22L26 18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <circle cx="28" cy="4" r="2" fill="white" opacity="0.8"/>
-              <circle cx="4" cy="28" r="1.5" fill="white" opacity="0.6"/>
-            </svg>
+          <Link href="/" className="flex items-center space-x-2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white" onClick={closeMobileMenu}>
+            <Image
+              src="/logo.png"
+              alt="Dryland Swim Lab"
+              width={32}
+              height={32}
+              className="flex-shrink-0"
+              priority
+            />
             <span className="text-white font-bold text-xl">{t('header.logo')}</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-sm font-medium transition-colors duration-200 ${
+                className={`py-2 text-sm font-medium transition-colors duration-200 ${
                   pathname === item.href
                     ? 'text-white border-b-2 border-white'
                     : 'text-blue-100 hover:text-white'
@@ -130,7 +133,7 @@ export default function Header() {
                   href={item.href}
                   onClick={closeMobileMenu}
                   className={`block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    pathname === item.href
+                  (pathname === item.href || (item.href === '/#coaches' && pathname === '/'))
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
