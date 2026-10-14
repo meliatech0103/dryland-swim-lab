@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -18,22 +17,6 @@ const heroImages = [
 
 export default function Home() {
   const { t, language } = useLanguage();
-  const [email, setEmail] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setIsSubmitted(true);
-      setShowModal(true);
-    }
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <StructuredData />
@@ -308,12 +291,11 @@ export default function Home() {
                   {/* Coming Soon 标签 */}
                   <div className="bg-white/20 backdrop-blur-sm rounded-full px-6 py-2 mb-4">
                     <span className="text-lg font-medium">
-                      {language === 'en' ? 'Coming Soon' : '敬请期待'}
+                      {language === 'en' ? 'Full Videos in Preparation' : '完整视频正在制作中'}
                     </span>
                   </div>
-                  {/* 上线时间 */}
                   <p className="text-cyan-100 text-lg">
-                    {language === 'en' ? 'Launching Late September 2026' : '9月底正式上线'}
+                    {language === 'en' ? 'Full course videos are being prepared' : '完整课程视频正在准备中'}
                   </p>
                 </div>
 
@@ -337,12 +319,12 @@ export default function Home() {
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900 mb-1">
-                          {language === 'en' ? 'Early Bird Discounts' : '首发早鸟优惠'}
+                          {language === 'en' ? 'Course Preview' : '课程预览'}
                         </h4>
                         <p className="text-gray-600 text-sm">
                           {language === 'en'
-                            ? 'Get exclusive launch pricing when you sign up now'
-                            : '现在预约，上线时享受专属首发折扣'
+                            ? 'Explore the course structure and sample lesson before launch'
+                            : '上线前先了解课程结构与预览内容'
                           }
                         </p>
                       </div>
@@ -354,12 +336,12 @@ export default function Home() {
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900 mb-1">
-                          {language === 'en' ? 'Open Water Training Pack' : '公开水域游泳专属资料包'}
+                          {language === 'en' ? 'Sales Status' : '课程状态'}
                         </h4>
                         <p className="text-gray-600 text-sm">
                           {language === 'en'
-                            ? 'Free open water swimming training materials for early sign-ups'
-                            : '早鸟用户免费获得公开水域游泳训练资料包'
+                            ? 'The full video course is being prepared. Explore the course structure and sample lesson.'
+                            : '完整视频课程正在准备中，可先了解课程结构与预览内容。'
                           }
                         </p>
                       </div>
@@ -379,60 +361,13 @@ export default function Home() {
                     </span>
                   </div>
 
-                  {/* 预约表单 */}
-                  {!isSubmitted ? (
-                    <form onSubmit={handleEmailSubmit} className="mb-4">
-                      <div className="flex gap-3">
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder={language === 'en' ? 'Enter your email for launch notification' : '输入邮箱获取上线通知'}
-                          required
-                          className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                        />
-                        <button
-                          type="submit"
-                          className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold rounded-lg hover:from-cyan-700 hover:to-blue-700 transition-colors"
-                        >
-                          {language === 'en' ? 'Notify Me' : '通知我'}
-                        </button>
-                      </div>
-                    </form>
-                  ) : (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 text-center">
-                      <div className="flex items-center justify-center gap-2 mb-2">
-                        <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="font-semibold text-green-800">
-                          {language === 'en' ? 'You\'re on the list!' : '预约成功！'}
-                        </span>
-                      </div>
-                      <p className="text-green-700 text-sm">
-                        {language === 'en'
-                          ? 'We\'ll notify you as soon as we launch. Get ready to transform your swimming!'
-                          : '我们会在课程上线时第一时间通知您。准备开始您的游泳蜕变之旅吧！'
-                        }
-                      </p>
-                    </div>
-                  )}
-
-                  {/* 预约按钮 */}
+                  {/* 课程预览入口 */}
                   <Link
                     href="/paid"
                     className="block w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-center py-4 rounded-lg font-semibold hover:from-cyan-700 hover:to-blue-700 transition-colors"
                   >
-                    {language === 'en' ? 'Learn More About Launch' : '了解更多上线信息'}
+                    {language === 'en' ? 'Preview the Course' : '预览课程内容'}
                   </Link>
-
-                  {/* 隐私说明 */}
-                  <p className="text-center text-gray-400 text-sm mt-4">
-                    {language === 'en'
-                      ? '🔒 Your email is safe with us. We respect your privacy.'
-                      : '🔒 您的邮箱很安全，我们尊重您的隐私。'
-                    }
-                  </p>
                 </div>
               </div>
             </div>
@@ -479,68 +414,6 @@ export default function Home() {
 
       <Footer />
 
-      {/* 弹窗提示 */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                {language === 'en' ? 'Thanks for Your Interest!' : '感谢您的关注！'}
-              </h3>
-
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                {language === 'en'
-                  ? 'You\'re now on our priority list. As an early subscriber, you\'ll receive:'
-                  : '您已加入我们的优先预约名单。作为早鸟用户，您将获得：'
-                }
-              </p>
-
-              <div className="space-y-3 text-left mb-6">
-                <div className="flex items-center gap-3 text-gray-700">
-                  <span className="text-cyan-600">✓</span>
-                  <span>
-                    {language === 'en'
-                      ? 'Early bird launch pricing (up to 40% off)'
-                      : '首发早鸟优惠（最高4折）'
-                    }
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 text-gray-700">
-                  <span className="text-cyan-600">✓</span>
-                  <span>
-                    {language === 'en'
-                      ? 'Free open water swimming training pack'
-                      : '免费公开水域游泳训练资料包'
-                    }
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 text-gray-700">
-                  <span className="text-cyan-600">✓</span>
-                  <span>
-                    {language === 'en'
-                      ? 'Priority access to course launch'
-                      : '课程上线优先访问权'
-                    }
-                  </span>
-                </div>
-              </div>
-
-              <button
-                onClick={handleCloseModal}
-                className="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold rounded-lg hover:from-cyan-700 hover:to-blue-700 transition-colors"
-              >
-                {language === 'en' ? 'Got It!' : '知道了！'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
