@@ -1014,33 +1014,6 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-              <div>
-                <h2 className="text-xl font-bold mb-3 text-gray-900">{t('calc.experience.title')}</h2>
-                <div className="grid grid-cols-1 gap-2">
-                  {(['beginner', 'intermediate', 'advanced'] as const).map((level) => (
-                    <button key={level} type="button" onClick={() => setFormData({ ...formData, experience: level })}
-                      className={`rounded-xl border p-3 text-left transition ${formData.experience === level ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}>
-                      <span className="block font-semibold text-gray-900">{t(`calc.experience.${level}.name`)}</span>
-                      <span className="mt-1 block text-xs leading-5 text-gray-600">{t(`calc.experience.${level}.description`)}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <h2 className="text-xl font-bold mb-3 text-gray-900">{t('calc.sessionTime.title')}</h2>
-                <div className="grid grid-cols-3 gap-2">
-                  {[30, 45, 60].map((minutes) => (
-                    <button key={minutes} type="button" onClick={() => setFormData({ ...formData, sessionMinutes: minutes })}
-                      className={`rounded-xl border p-3 font-semibold transition ${formData.sessionMinutes === minutes ? 'border-blue-500 bg-blue-50 text-blue-700 ring-1 ring-blue-200' : 'border-gray-200 text-gray-700 hover:border-blue-300'}`}>
-                      {t('calc.sessionTime.minutes', { minutes })}
-                    </button>
-                  ))}
-                </div>
-                <p className="mt-3 text-sm leading-6 text-gray-500">{t('calc.sessionTime.note')}</p>
-              </div>
-            </div>
-
             <h2 className="text-2xl font-bold mb-6 text-gray-900">{t('calc.mode.title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               {trainingModes.map((mode) => (
@@ -1097,14 +1070,6 @@ export default function TrainingPlanGenerator({ onPlanGenerated }: TrainingPlanG
                   <p className="font-bold text-gray-900">
                     {t('calc.generated.days', { days: formData.trainingDays })}
                   </p>
-                </div>
-                <div>
-                  <span className="text-gray-600">{t('calc.generated.experience')}</span>
-                  <p className="font-bold text-gray-900">{t(`calc.experience.${formData.experience}.name`)}</p>
-                </div>
-                <div>
-                  <span className="text-gray-600">{t('calc.generated.sessionTime')}</span>
-                  <p className="font-bold text-gray-900">{t('calc.sessionTime.minutes', { minutes: formData.sessionMinutes })}</p>
                 </div>
                 <div>
                   <span className="text-gray-600">{t('calc.generated.mode')}</span>
