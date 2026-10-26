@@ -8,13 +8,13 @@ interface ImageCarouselProps {
   interval?: number;
 }
 
-// 遮罩颜色方案（固定使用浅色方案，因为这是用户最终的偏好）
+// 轮播控件在照片上保持清晰可见，不再覆盖整张背景图
 const OVERLAY_STYLE = {
-  className: 'bg-gradient-to-br from-white/60 via-blue-50/50 to-cyan-50/40',
-  textClass: 'text-gray-900', // 深色文字
-  indicatorActive: 'bg-blue-600',
-  indicatorInactive: 'bg-blue-600/50',
-  arrowClass: 'bg-blue-600/20 hover:bg-blue-600/30 text-blue-900',
+  className: 'bg-transparent',
+  textClass: 'text-white',
+  indicatorActive: 'bg-white',
+  indicatorInactive: 'bg-white/50',
+  arrowClass: 'bg-slate-950/35 hover:bg-slate-950/55 text-white',
 };
 
 export default function ImageCarousel({ images, interval = 5000 }: ImageCarouselProps) {

@@ -10,10 +10,8 @@ import { useLanguage } from '@/lib/LanguageContext';
 
 // Hero区域轮播图片配置
 const heroImages = [
-  '/images/hero/hero-1.jpg',
-  '/images/hero/hero-2.jpg',
-  '/images/hero/hero-3.jpg',
-  '/images/hero/hero-4.jpg',
+  '/images/hero/hero-2.jpg', // pictures/IMG_5643.JPG
+  '/images/hero/hero-1.jpg', // pictures/IMG_5634.JPG
 ];
 
 export default function Home() {
@@ -25,44 +23,39 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative isolate flex min-h-[620px] items-center overflow-hidden py-16 sm:py-20">
+        <section className="relative isolate flex min-h-[560px] items-center overflow-hidden py-12 sm:min-h-[620px] sm:py-16">
           {/* 背景图片轮播 */}
           <div className="absolute inset-0 h-full z-0">
             <ImageCarousel images={heroImages} interval={6000} />
           </div>
-          <div className="absolute inset-0 z-[1] bg-gradient-to-r from-slate-950/80 via-blue-950/55 to-slate-900/10" />
-          <div className="absolute inset-0 z-[1] bg-gradient-to-t from-slate-950/35 via-transparent to-slate-950/10" />
+          <div className="absolute inset-0 z-[1] bg-gradient-to-r from-slate-950/70 via-slate-950/35 to-slate-950/5" />
+          <div className="absolute inset-0 z-[1] bg-gradient-to-t from-slate-950/25 via-transparent to-slate-950/10" />
 
           {/* Hero 内容 */}
           <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl rounded-[2rem] border border-white/40 bg-white/90 p-6 shadow-2xl shadow-slate-950/20 backdrop-blur-md sm:p-10 lg:p-12">
-              <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3.5 py-2 text-xs font-bold uppercase tracking-[0.18em] text-cyan-800">
-                <span className="h-2 w-2 rounded-full bg-cyan-500" />
-                {language === 'en' ? 'Coach-led · Swim-specific · Built for amateurs' : '教练设计 · 自由泳专项 · 面向业余泳者'}
+            <div className="max-w-2xl py-8 sm:py-12">
+              <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/30 bg-slate-950/25 px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white backdrop-blur-sm">
+                <span className="h-2 w-2 rounded-full bg-cyan-300" />
+                {language === 'en' ? 'Free freestyle training planner' : '免费自由泳训练计划'}
               </p>
-              <h1 className="mb-5 max-w-2xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
+              <h1 className="mb-5 max-w-xl text-4xl font-black leading-[1.08] tracking-tight text-white [text-shadow:0_2px_18px_rgba(0,0,0,0.24)] sm:text-5xl lg:text-6xl">
                 {t('home.hero.title')}<br />
-                <span className="text-blue-700">{t('home.hero.subtitle')}</span>
+                <span className="text-cyan-300">{t('home.hero.subtitle')}</span>
               </h1>
-              <p className="mb-8 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
+              <p className="mb-8 max-w-xl text-base leading-7 text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.3)] sm:text-lg sm:leading-8">
                 {t('home.hero.description')}
               </p>
-              <div className="mb-8 flex flex-wrap gap-2.5 text-sm font-semibold text-slate-700">
-                {[language === 'en' ? '3 guided sessions' : '3 节视频课程', language === 'en' ? '15 minutes each' : '每节 15 分钟', language === 'en' ? 'Strength + body control' : '力量与身体控制'].map((item) => (
-                  <span key={item} className="rounded-full border border-slate-200 bg-white px-3.5 py-2">{item}</span>
-                ))}
-              </div>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/free/calc"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-700 px-6 py-3.5 font-bold text-white shadow-lg shadow-blue-900/20 transition hover:-translate-y-0.5 hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 font-bold text-white shadow-lg shadow-slate-950/25 transition hover:-translate-y-0.5 hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
                   {t('home.hero.tryFree')}
                   <Icon name="arrow" className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/paid"
-                  className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-bold text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                  className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/70 bg-slate-950/20 px-6 py-3.5 font-bold text-white backdrop-blur-sm transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
                   {t('home.hero.viewCourse')}
                 </Link>
@@ -104,183 +97,64 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Three Core Themes */}
-            <div className="space-y-16">
-
-              {/* Professional Training */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                <div className="order-2 lg:order-1">
-                  <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
-                    {language === 'en' ? 'Professional Training' : '专业训练'}
-                  </h3>
-                  <p className="text-gray-600 text-lg mb-8 leading-relaxed">
-                    {language === 'en'
-                      ? 'Scientific training methodology based on sports physiology and biomechanics. Our training system integrates dryland and water training to maximize your performance.'
-                      : '基于运动生理学和生物力学的科学训练方法。我们的训练体系融合陆上与水上训练，最大化提升你的表现。'}
-                  </p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-blue-50 rounded-xl p-4">
-                      <div className="mb-2 text-blue-600"><Icon name="strength" className="h-6 w-6" /></div>
-                      <div className="text-sm text-gray-600">
-                        {language === 'en' ? 'Dryland + Water Integration' : '陆水结合训练'}
-                      </div>
-                    </div>
-                    <div className="bg-cyan-50 rounded-xl p-4">
-                      <div className="mb-2 text-cyan-600"><Icon name="target" className="h-6 w-6" /></div>
-                      <div className="text-sm text-gray-600">
-                        {language === 'en' ? 'Personalized Progression' : '个性化进阶'}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="order-1 lg:order-2 grid grid-cols-2 gap-4">
-                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
-                    <img
-                      src="/images/why-us/training-1.jpg"
-                      alt="Professional Training 1"
-                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
-                    <img
-                      src="/images/why-us/training-2.jpg"
-                      alt="Professional Training 2"
-                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Professional Coaches */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
+            {/* Coaching Team */}
+            <div>
+              <h3 id="coaches" className="mb-8 scroll-mt-24 text-2xl font-bold text-gray-900 md:text-3xl">
+                {language === 'en' ? 'Professional Coaches' : '专业教练'}
+              </h3>
+              <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                <article className="rounded-3xl border border-blue-100 bg-white p-6 shadow-sm sm:p-8">
+                  <div className="mb-5 flex items-center gap-5">
                     <img
                       src="/images/why-us/coach-1.jpg"
-                      alt="Professional Coach 1"
-                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                      alt={language === 'en' ? 'Rick Van Der Zant coaching at the pool' : 'Rick Van Der Zant 在泳池边指导训练'}
+                      className="h-24 w-24 shrink-0 rounded-full border-4 border-blue-50 object-cover shadow-sm sm:h-28 sm:w-28"
+                      style={{ objectPosition: '44% 32%' }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div>
+                      <h4 className="text-xl font-bold text-gray-900 sm:text-2xl">Rick Van Der Zant</h4>
+                      <p className="mt-1 text-sm font-medium text-blue-700">
+                        {language === 'en' ? 'Former Australian National Team Swimmer' : '前澳大利亚国家队运动员'}
+                      </p>
+                    </div>
                   </div>
-                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
+                  <div className="mb-4 inline-flex rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-800">
+                    {language === 'en' ? '45 years coaching' : '45 年执教经验'}
+                  </div>
+                  <p className="text-sm leading-7 text-gray-600">
+                    {language === 'en'
+                      ? 'Works with the Queensland Academy of Sport sports science team to develop systematic training frameworks.'
+                      : '长期与昆士兰体育学院（QAS）运动科学团队合作，专注构建系统化训练体系。'}
+                  </p>
+                </article>
+
+                <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                  <div className="mb-5 flex items-center gap-5">
                     <img
                       src="/images/why-us/coach-2.jpg"
-                      alt="Professional Coach 2"
-                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                      alt={language === 'en' ? 'Swimming coach at the pool' : '游泳教练在泳池边'}
+                      className="h-24 w-24 shrink-0 rounded-full border-4 border-slate-100 object-cover shadow-sm sm:h-28 sm:w-28"
+                      style={{ objectPosition: '34% 48%' }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                </div>
-                <div className="space-y-6">
-                  <h3 id="coaches" className="scroll-mt-24 text-2xl md:text-3xl font-bold mb-6 text-gray-900">
-                    {language === 'en' ? 'Professional Coaches' : '专业教练'}
-                  </h3>
-
-                  {/* Coach 1: Rick Van Der Zant */}
-                  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                        RV
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-xl font-bold text-gray-900 mb-1">
-                          Rick Van Der Zant
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="bg-blue-600 text-white px-2 py-0.5 rounded text-xs font-medium">
-                            {language === 'en' ? 'International Coach' : '国际教练'}
-                          </span>
-                          <span className="bg-cyan-600 text-white px-2 py-0.5 rounded text-xs font-medium">
-                            45 {language === 'en' ? 'Years Exp' : '年经验'}
-                          </span>
-                        </div>
-                      </div>
+                    <div>
+                      <h4 className="text-xl font-bold text-gray-900 sm:text-2xl">
+                        Mach
+                      </h4>
+                      <p className="mt-1 text-sm font-medium text-blue-700">
+                        {language === 'en' ? 'Assistant Coach to Dirk Lange' : '德克·朗格团队助教'}
+                      </p>
                     </div>
-                    <p className="text-gray-700 leading-relaxed text-sm">
-                      {language === 'en'
-                        ? 'Internationally renowned swimming coach Rick Van Der Zant, former Australian national team swimmer with 45 years of coaching experience. Long-term collaborator with the Queensland Academy of Sport (QAS) sports science team, dedicated to building scientific and systematic training frameworks.'
-                        : '国际知名游泳教练 Rick Van Der Zant，前澳大利亚国家队运动员，拥有 45 年执教经验。长期与澳大利亚昆士兰体育学院（QAS）运动科学团队合作，专注构建科学、系统化训练体系。'}
-                    </p>
                   </div>
-
-                  {/* Coach 2: Mach */}
-                  <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 border border-gray-200">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-gray-700 to-blue-700 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                        MC
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-xl font-bold text-gray-900 mb-1">
-                          {language === 'en' ? 'Coach Mach' : '马赫教练'}
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="bg-gray-700 text-white px-2 py-0.5 rounded text-xs font-medium">
-                            {language === 'en' ? 'Elite Coach' : '精英教练'}
-                          </span>
-                          <span className="bg-blue-700 text-white px-2 py-0.5 rounded text-xs font-medium">
-                            {language === 'en' ? 'Expert Trainer' : '专业教练'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-gray-700 leading-relaxed text-sm">
-                      {language === 'en'
-                        ? 'Coach Mach, core team member and senior assistant coach to world-renowned swimming coach Dirk Schrauwen. Bringing extensive international high-level training and tactical guidance experience, specializing in bridging world-class training philosophies with localized instruction.'
-                        : '马赫教练，国际泳坛著名教练德克（Dirk Schrauwen）核心教练团队成员、资深助理教练。拥有丰富的国际化高水平训练与赛训指导经验，擅长将世界级顶尖训练理念与本土化教学相结合。'}
-                    </p>
+                  <div className="mb-4 inline-flex rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-800">
+                    {language === 'en' ? 'International coaching experience' : '国际执教经验'}
                   </div>
-                </div>
-              </div>
-
-              {/* Training Base */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                <div className="order-2 lg:order-1">
-                  <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
-                    {language === 'en' ? 'Training Base' : '训练基地'}
-                  </h3>
-                  <p className="text-gray-600 text-lg mb-8 leading-relaxed">
+                  <p className="text-sm leading-7 text-gray-600">
                     {language === 'en'
-                      ? 'Located at Longchuan Bay, Thousand Island Lake, Zhejiang Provincial Triathlon Federation Training Base. Professional training environment with complete facilities.'
-                      : '位于浙江省千岛湖龙川湾，浙江省铁人三项训练基地。专业训练环境，设施完善。'}
+                      ? 'Previously assisted Dirk Lange and helped coach international swimmers, including London 2012 Olympic champion Cameron van der Burgh.'
+                      : '曾担任德克·朗格的助教，参与国际泳者训练，其中包括伦敦 2012 奥运冠军卡梅伦·范德伯格。'}
                   </p>
-                  <div className="bg-gray-50 rounded-xl p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="text-cyan-600"><Icon name="pool" className="h-8 w-8" /></div>
-                      <div>
-                        <div className="font-semibold text-gray-900 mb-2">
-                          {language === 'en' ? 'Training Environment' : '训练环境'}
-                        </div>
-                        <p className="text-gray-600 text-sm">
-                          {language === 'en'
-                            ? 'Professional swimming pool, dryland training area, recovery facilities'
-                            : '专业泳池、陆上训练区、恢复设施'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="order-1 lg:order-2 grid grid-cols-2 gap-4">
-                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
-                    <img
-                      src="/images/why-us/base-1.jpg"
-                      alt="Training Base"
-                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                  <div className="relative overflow-hidden rounded-2xl shadow-lg group">
-                    <img
-                      src="/images/why-us/base-2.jpg"
-                      alt="Training Base 2"
-                      className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                </div>
+                </article>
               </div>
-
             </div>
           </div>
         </section>

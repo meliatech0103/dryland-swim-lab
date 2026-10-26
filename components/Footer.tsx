@@ -16,7 +16,7 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <Image
-                src="/logo.png"
+                src="/logo-transparent.png"
                 alt="Dryland Swim Lab"
                 width={28}
                 height={28}
@@ -27,14 +27,10 @@ export default function Footer() {
               {language === 'en' ? (
                 <>
                   A dryland training platform dedicated to amateur swimming enthusiasts.
-                  Based at Longchuan Bay, Thousand Island Lake, Zhejiang Provincial Triathlon Federation Training Base.
-                  Specialized courses in freestyle with 1v1 online coaching.
                 </>
               ) : (
                 <>
                   专为业余游泳爱好者打造的陆地训练平台。
-                  位于浙江省铁人三项训练基地千岛湖龙川湾。
-                  提供自由泳专项课程和1v1在线指导。
                 </>
               )}
             </p>
@@ -70,9 +66,7 @@ export default function Footer() {
               {language === 'en' ? 'Contact Us' : '联系我们'}
             </h3>
             <ul className="space-y-3 text-gray-400 text-sm">
-              <li className="flex items-start gap-2"><Icon name="location" className="mt-0.5 h-4 w-4 flex-none text-cyan-400" />{language === 'en' ? 'Longchuan Bay Training Base, Thousand Island Lake, Zhejiang' : '浙江省千岛湖龙川湾训练基地'}</li>
               <li className="flex items-center gap-2"><Icon name="mail" className="h-4 w-4 flex-none text-cyan-400" />contact@drylandswimlab.com</li>
-              <li className="flex items-center gap-2"><Icon name="phone" className="h-4 w-4 flex-none text-cyan-400" />{language === 'en' ? '1v1 Online Coaching Available' : '提供1v1在线指导'}</li>
             </ul>
           </div>
         </div>

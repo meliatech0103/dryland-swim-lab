@@ -21,10 +21,10 @@ export function useTranslation(language: Language) {
     // Home Page
     home: {
       hero: {
-        title: 'Dryland Training',
-        subtitle: 'for Freestyle Swimmers',
-        description: 'Coach-led strength and technique sessions for adult and amateur swimmers.',
-        tryFree: 'Build My Training Plan',
+        title: 'Plan Your Freestyle Training',
+        subtitle: 'Around Your Week',
+        description: 'Choose your experience, goal, and available time to build a practical weekly swim or dryland plan.',
+        tryFree: 'Build My Free Plan',
         viewCourse: 'Explore the Course',
       },
       features: {
@@ -294,10 +294,10 @@ export function useTranslation(language: Language) {
     // Home Page
     home: {
       hero: {
-        title: '自由泳陆上训练',
-        subtitle: '为业余泳者打造',
-        description: '由教练设计的力量与技术训练，帮助你更有准备地回到泳池。',
-        tryFree: '生成训练计划',
+        title: '生成自由泳训练计划',
+        subtitle: '按你的时间和水平安排',
+        description: '选择训练经验、目标和可用时间，生成适合你的一周水下或陆上训练安排。',
+        tryFree: '免费生成我的计划',
         viewCourse: '了解课程',
       },
       features: {

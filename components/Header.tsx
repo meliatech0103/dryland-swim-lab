@@ -34,7 +34,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white" onClick={closeMobileMenu}>
             <Image
-              src="/logo.png"
+              src="/logo-transparent.png"
               alt="Dryland Swim Lab"
               width={32}
               height={32}
