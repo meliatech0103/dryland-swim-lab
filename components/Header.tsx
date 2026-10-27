@@ -14,9 +14,8 @@ export default function Header() {
   const navItems = [
     { href: '/', labelKey: 'header.home' },
     { href: '/free/calc', labelKey: 'header.trainingTools' },
-    { href: '/free/blog', labelKey: 'header.trainingPlans' },
     { href: '/paid', labelKey: 'header.course' },
-    { href: '/#coaches', labelKey: 'header.coaches' },
+    { href: '/free/blog', labelKey: 'header.trainingPlans' },
   ];
 
   const toggleMobileMenu = () => {
