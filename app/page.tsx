@@ -64,40 +64,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Why Choose Us Section */}
+        {/* Coaching Team */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">
-              {language === 'en' ? 'Why Choose Us' : '为什么选择我们'}
-            </h2>
-
-            {/* Core Value Proposition */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-              <div className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-8 text-white shadow-xl">
-                <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-cyan-100"><Icon name="water" className="h-8 w-8" /></div>
-                <div className="text-xl md:text-2xl font-medium mb-1">
-                  {language === 'en' ? 'Scientific Training System' : '科学训练体系'}
-                </div>
-                <p className="text-cyan-100 text-sm md:text-base">
-                  {language === 'en'
-                    ? 'Methodology built on sports physiology and biomechanics, integrating dryland and water training'
-                    : '基于运动生理学和生物力学的训练方法，融合陆上与水上训练'}
-                </p>
-              </div>
-              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 text-white shadow-xl">
-                <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-cyan-200"><Icon name="globe" className="h-8 w-8" /></div>
-                <div className="text-xl md:text-2xl font-medium mb-1">
-                  {language === 'en' ? 'International Coaching Team' : '国际化教练团队'}
-                </div>
-                <p className="text-gray-300 text-sm md:text-base">
-                  {language === 'en'
-                    ? 'Led by former Australian national team swimmers and world-renowned coach teams'
-                    : '由前澳大利亚国家队运动员和国际知名教练团队领衔'}
-                </p>
-              </div>
-            </div>
-
-            {/* Coaching Team */}
             <div>
               <h3 id="coaches" className="mb-8 scroll-mt-24 text-2xl font-bold text-gray-900 md:text-3xl">
                 {language === 'en' ? 'Professional Coaches' : '专业教练'}
