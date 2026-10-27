@@ -7,6 +7,13 @@ import { useLanguage } from '@/lib/LanguageContext';
 
 const blogPosts = [
   {
+    id: 3,
+    titleKey: 'blog.post3.title',
+    excerptKey: 'blog.post3.excerpt',
+    date: '2026-10-27',
+    categoryKey: 'blog.categoryTechnique',
+  },
+  {
     id: 2,
     titleKey: 'blog.post2.title',
     excerptKey: 'blog.post2.excerpt',
@@ -24,12 +31,16 @@ const blogPosts = [
 
 const blogContent = {
   en: {
+    'blog.post3.title': 'Why Do You Tire So Quickly When You Swim Faster? Check These Three Freestyle Basics First',
+    'blog.post3.excerpt': 'If you get out of breath as soon as you pick up the pace, your legs sink, or your stroke feels choppy, fitness may not be the only factor. Try focusing on one part of your technique at a time and notice whether swimming feels easier.',
     'blog.post1.title': 'How Amateurs Can Build an Actionable Training Plan: From Water Feel to Systematic Progression',
     'blog.post1.excerpt': 'For amateur swimmers, blindly piling up yardage often yields limited results. Drawing on our team\'s 2 years of practical experience organizing over 120 team training sessions for enthusiasts, this article provides a step-by-step guide to breaking down core goals, integrating specialized dryland swim training, and crafting an actionable training plan that balances work and life to break through long-standing plateaus.',
     'blog.post2.title': 'My Freestyle "Aha" Moments: Body Position, High Elbow Catch & Breathing Rotation',
     'blog.post2.excerpt': 'Three game-changing insights from an amateur swimmer\'s journey: how visualizing a drawn bow transformed my body position, why pointing my elbow to the sky unlocked the catch, and how "flirting" hips finally fixed my breathing rotation. Plain-language tips from fellow swimmers that changed everything.',
   },
   zh: {
+    'blog.post3.title': '为什么自由泳一提速就累？先检查这 3 个技术环节',
+    'blog.post3.excerpt': '一加快速度就喘、腿往下沉、每次划水像断了节奏，不一定只是体能不够。试着一次只关注一个技术环节，再观察游起来是否更轻松。',
     'blog.post1.title': '业余爱好者如何制定可实施的训练计划：从水感突破到系统进阶',
     'blog.post1.excerpt': '对于业余游泳爱好者而言，盲目堆砌游量往往效果甚微。结合我们团队2年来组织120余场业余爱好者的团队训练实践经验，手把手教你如何拆解核心目标、结合游泳陆地专项体能训练（Dryland Training），制定一份兼顾工作与生活的可执行游泳训练计划，突破长期以来的技术瓶颈。',
     'blog.post2.title': '我的自由泳开悟时刻：身体姿态、高肘抱水与换气转体',
